@@ -17,14 +17,16 @@ public class Graphies {
 		BufferedImage image = new BufferedImage(1240, 1754, BufferedImage.TYPE_INT_RGB);
 		try {
 			BufferedImage read = ImageIO.read(new FileInputStream(new File("D:/tickets.png")));
+			BufferedImage bi = ImageIO.read(new FileInputStream(new File("D:/new-1.gif")));
 			Graphics graphics = image.getGraphics();
 			graphics.drawImage(read.getScaledInstance(1240, 1754, Image.SCALE_DEFAULT),0,0,null);
+			graphics.drawImage(bi.getScaledInstance(200, 200, Image.SCALE_DEFAULT),96,900,null);
 			graphics.setColor(Color.black);
 			Font font = new Font("微软雅黑", Font.BOLD, 24);
 			graphics.setFont(new Font("Arial Unicode MS", Font.BOLD, 40));
 			graphics.drawString("ภาษาไทย", 608, 951);//绘制文字
 			graphics.dispose();
-			ImageIO.write(image, "png", new File("D:/tickets1.png"));
+			ImageIO.write(image, "png", new File("D:/tickets7.png"));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

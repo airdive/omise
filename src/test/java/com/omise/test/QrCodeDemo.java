@@ -14,7 +14,7 @@ import com.linktai.utils.zxing.MatrixToImageWriter;
 
 public class QrCodeDemo {
 	public static void Encode_QR_CODE() throws IOException, WriterException {
-		String contents = "ZXing 二维码内容1234!"; // 二维码内容
+		String contents = "process.start(http://www.sina.com.cn)"; // 二维码内容
 		int width = 430; // 二维码图片宽度 300
 		int height = 430; // 二维码图片高度300
 
@@ -52,4 +52,5 @@ public class QrCodeDemo {
 			e.printStackTrace();
 		}
 	}
+
 }
