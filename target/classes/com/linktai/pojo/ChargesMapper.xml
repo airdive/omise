@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linktai.dao.ChargesMapper">
+  <resultMap id="BaseResultMap" type="com.linktai.pojo.Charges">
+    <result column="charges_id" jdbcType="INTEGER" property="chargesId" />
+    <result column="account_id" jdbcType="INTEGER" property="accountId" />
+    <result column="ticket_id" jdbcType="INTEGER" property="ticketId" />
+    <result column="charges_rental" jdbcType="INTEGER" property="chargesRental" />
+    <result column="charges_time" jdbcType="TIMESTAMP" property="chargesTime" />
+    <result column="charges_state" jdbcType="INTEGER" property="chargesState" />
+    <result column="isSendmail" jdbcType="INTEGER" property="issendmail" />
+    <result column="charges_number_Omise" jdbcType="VARCHAR" property="chargesNumberOmise" />
+    <result column="zxingCodePath" jdbcType="VARCHAR" property="zxingcodepath" />
+    <result column="sign" jdbcType="VARCHAR" property="sign" />
+    <result column="isUsed" jdbcType="INTEGER" property="isused" />
+  </resultMap>
+  <insert id="insert" parameterType="com.linktai.pojo.Charges">
+    insert into edcon_charges (charges_id, account_id, ticket_id, 
+      charges_rental, charges_time, charges_state, 
+      isSendmail, charges_number_Omise, zxingCodePath, 
+      sign, isUsed)
+    values (#{chargesId,jdbcType=INTEGER}, #{accountId,jdbcType=INTEGER}, #{ticketId,jdbcType=INTEGER}, 
+      #{chargesRental,jdbcType=INTEGER}, #{chargesTime,jdbcType=TIMESTAMP}, #{chargesState,jdbcType=INTEGER}, 
+      #{issendmail,jdbcType=INTEGER}, #{chargesNumberOmise,jdbcType=VARCHAR}, #{zxingcodepath,jdbcType=VARCHAR}, 
+      #{sign,jdbcType=VARCHAR}, #{isused,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.linktai.pojo.Charges">
+    insert into edcon_charges
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="chargesId != null">
+        charges_id,
+      </if>
+      <if test="accountId != null">
+        account_id,
+      </if>
+      <if test="ticketId != null">
+        ticket_id,
+      </if>
+      <if test="chargesRental != null">
+        charges_rental,
+      </if>
+      <if test="chargesTime != null">
+        charges_time,
+      </if>
+      <if test="chargesState != null">
+        charges_state,
+      </if>
+      <if test="issendmail != null">
+        isSendmail,
+      </if>
+      <if test="chargesNumberOmise != null">
+        charges_number_Omise,
+      </if>
+      <if test="zxingcodepath != null">
+        zxingCodePath,
+      </if>
+      <if test="sign != null">
+        sign,
+      </if>
+      <if test="isused != null">
+        isUsed,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="chargesId != null">
+        #{chargesId,jdbcType=INTEGER},
+      </if>
+      <if test="accountId != null">
+        #{accountId,jdbcType=INTEGER},
+      </if>
+      <if test="ticketId != null">
+        #{ticketId,jdbcType=INTEGER},
+      </if>
+      <if test="chargesRental != null">
+        #{chargesRental,jdbcType=INTEGER},
+      </if>
+      <if test="chargesTime != null">
+        #{chargesTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="chargesState != null">
+        #{chargesState,jdbcType=INTEGER},
+      </if>
+      <if test="issendmail != null">
+        #{issendmail,jdbcType=INTEGER},
+      </if>
+      <if test="chargesNumberOmise != null">
+        #{chargesNumberOmise,jdbcType=VARCHAR},
+      </if>
+      <if test="zxingcodepath != null">
+        #{zxingcodepath,jdbcType=VARCHAR},
+      </if>
+      <if test="sign != null">
+        #{sign,jdbcType=VARCHAR},
+      </if>
+      <if test="isused != null">
+        #{isused,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>

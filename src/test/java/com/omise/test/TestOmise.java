@@ -1,6 +1,7 @@
 package com.omise.test;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import org.junit.Test;
 
@@ -96,6 +97,12 @@ public class TestOmise {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	@Test
+	public void test3() {
+		UUID randomUUID = UUID.randomUUID();
+		System.out.println(randomUUID.toString());
 	}
 	
 
