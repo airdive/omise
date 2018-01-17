@@ -1,6 +1,6 @@
 package com.linktai.pojo;
 
-public class Card {
+public class CardOfAc {
 	private String nameOnCard;
 	private String cardNumber;
 	private Integer expiryMonth;

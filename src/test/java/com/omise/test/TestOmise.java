@@ -65,13 +65,10 @@ public class TestOmise {
 			System.out.println("created charge: " + charge.getId());
 			
 		} catch (ClientException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (OmiseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

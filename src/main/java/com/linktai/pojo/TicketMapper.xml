@@ -19,7 +19,7 @@
 		#{image,jdbcType=VARCHAR},#{cardNumber,jdbcType=VARCHAR}
 		)
 	</insert>
-	<select id="findNumberOfTicket" resultType="com.linktai.pojo.Ticket">
+	<select id="findTicket" resultType="com.linktai.pojo.Ticket">
 		SELECT id,time,number,location,price,image
 		FROM edcon_ticket WHERE time>=current_timestamp;
 	</select>

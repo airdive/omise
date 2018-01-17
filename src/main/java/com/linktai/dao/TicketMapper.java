@@ -7,6 +7,6 @@ public interface TicketMapper {
 
 	int insertSelective(Ticket record);
 	
-	Integer findNumberOfTicket();
+	Ticket findTicket();
 
 }
