@@ -1,5 +1,6 @@
 package com.linktai.pojo;
 
+import java.io.File;
 import java.util.Date;
 
 public class Mail {
@@ -8,16 +9,18 @@ public class Mail {
 	private String subject;
 	private StringBuilder content;
 	private Date sendDate;
+	private File files;
 	public Mail() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Mail(String recever, String subject, StringBuilder content, Date sendDate) {
+	public Mail(String recever, String subject, StringBuilder content, Date sendDate,File files) {
 		super();
 		this.recever = recever;
 		this.subject = subject;
 		this.content = content;
 		this.sendDate = sendDate;
+		this.files = files;
 	}
 
 	public String getRecever() {
@@ -44,5 +47,14 @@ public class Mail {
 	public void setSendDate(Date sendDate) {
 		this.sendDate = sendDate;
 	}
+
+	public File getFiles() {
+		return files;
+	}
+
+	public void setFiles(File files) {
+		this.files = files;
+	}
+	
 	
 }
