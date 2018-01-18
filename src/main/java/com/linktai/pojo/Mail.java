@@ -4,17 +4,17 @@ import java.io.File;
 import java.util.Date;
 
 public class Mail {
-	//ÊÕ¼þÈË
+	//ï¿½Õ¼ï¿½ï¿½ï¿½
 	private String recever;
 	private String subject;
-	private StringBuilder content;
+	private String content;
 	private Date sendDate;
 	private File files;
 	public Mail() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Mail(String recever, String subject, StringBuilder content, Date sendDate,File files) {
+	public Mail(String recever, String subject, String content, Date sendDate,File files) {
 		super();
 		this.recever = recever;
 		this.subject = subject;
@@ -35,10 +35,10 @@ public class Mail {
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
-	public StringBuilder getContent() {
+	public String getContent() {
 		return content;
 	}
-	public void setContent(StringBuilder content) {
+	public void setContent(String content) {
 		this.content = content;
 	}
 	public Date getSendDate() {

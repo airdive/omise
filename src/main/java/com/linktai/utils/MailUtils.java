@@ -22,41 +22,41 @@ import com.linktai.pojo.Mail;
 
 @Component
 public class MailUtils {
-	// ·¢ËÍÕËºÅ,ÃÜÂë
+	// ï¿½ï¿½ï¿½ï¿½ï¿½Ëºï¿½,ï¿½ï¿½ï¿½ï¿½
 	public static String myEmailAccount = "17770039942@163.com";
 	public static String myEmailPassword = "asdasd123123";
 	public static String myEmailSMTPHost = "smtp.163.com";
 
 	public static String cMailAccount = "571740367@qq.com";
 
-	public boolean sendMessage(Mail mail) {
-		Properties props = new Properties(); // ²ÎÊýÅäÖÃ
-		props.setProperty("mail.transport.protocol", "smtp"); // Ê¹ÓÃµÄÐ­Òé£¨JavaMail¹æ·¶ÒªÇó£©
-		props.setProperty("mail.smtp.host", myEmailSMTPHost); // ·¢¼þÈËµÄÓÊÏäµÄ SMTP ·þÎñÆ÷µØÖ·
-		props.setProperty("mail.smtp.auth", "true"); // ÐèÒªÇëÇóÈÏÖ¤
+	public static boolean sendMessage(Mail mail) {
+		Properties props = new Properties(); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		props.setProperty("mail.transport.protocol", "smtp"); // Ê¹ï¿½Ãµï¿½Ð­ï¿½é£¨JavaMailï¿½æ·¶Òªï¿½ï¿½
+		props.setProperty("mail.smtp.host", myEmailSMTPHost); // ï¿½ï¿½ï¿½ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ SMTP ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·
+		props.setProperty("mail.smtp.auth", "true"); // ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¤
 		Session session = Session.getInstance(props);
-		session.setDebug(true);
+		//session.setDebug(true);
 
-		// ´´½¨ÓÊ¼þ
+		// ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½
 		MimeMessage message = new MimeMessage(session);
 		try {
 			message.setFrom(new InternetAddress(myEmailAccount, "linktime", "utf-8"));
 			message.setRecipient(MimeMessage.RecipientType.TO, new InternetAddress(cMailAccount, "cc", "utf-8"));
-			message.setSubject("ÕâÊÇÖ÷Ìâ");
+			message.setSubject(mail.getSubject());
 			
-			//ÕýÎÄ
+			//ï¿½ï¿½ï¿½ï¿½
 			MimeBodyPart text = new MimeBodyPart();
-			text.setContent("<h1>ÕâÊÇÄÚÈÝÎ»ÖÃ</h1>", "text/html;charset=UTF-8");
-			//¸½¼þ
+			text.setContent(mail.getContent(), "text/html;charset=UTF-8");
+			//ï¿½ï¿½ï¿½ï¿½
 			MimeBodyPart attachment = new MimeBodyPart();
-			DataHandler dh2 = new DataHandler(new FileDataSource("D:/tickets7.png")); // ¶ÁÈ¡±¾µØÎÄ¼þ
-			attachment.setDataHandler(dh2); // ½«¸½¼þÊý¾ÝÌí¼Óµ½¡°½Úµã¡±
+			DataHandler dh2 = new DataHandler(new FileDataSource(mail.getFiles())); // ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
+			attachment.setDataHandler(dh2); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½ï¿½ï¿½ï¿½Úµã¡±
 			attachment.setFileName(MimeUtility.encodeText(dh2.getName()));
 
 			MimeMultipart mm = new MimeMultipart();
 			mm.addBodyPart(text);
-			mm.addBodyPart(attachment); // Èç¹ûÓÐ¶à¸ö¸½¼þ£¬¿ÉÒÔ´´½¨¶à¸ö¶à´ÎÌí¼Ó
-			mm.setSubType("mixed"); // »ìºÏ¹ØÏµ
+			mm.addBodyPart(attachment); // ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			mm.setSubType("mixed"); // ï¿½ï¿½Ï¹ï¿½Ïµ
 
 			message.setContent(mm);
 			message.setSentDate(new Date());

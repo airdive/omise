@@ -1,8 +1,9 @@
-package com.omise.test;
+package com.linktai.utils.zxing;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Hashtable;
+import java.util.UUID;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -10,11 +11,9 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import com.linktai.utils.zxing.MatrixToImageWriter;
 
-public class QrCodeDemo {
-	public static void Encode_QR_CODE() throws IOException, WriterException {
-		String contents = "process.start(http://www.sina.com.cn)"; // 二维码内容
+public class ZxingUtils {
+	public static String Encode_QR_CODE(String contents) throws IOException, WriterException {
 		int width = 430; // 二维码图片宽度 300
 		int height = 430; // 二维码图片高度300
 
@@ -39,18 +38,11 @@ public class QrCodeDemo {
 				hints);// 生成条形码时的一些配置,此项可选
 
 		// 生成二维码
-		File outputFile = new File("d:" + File.separator + "new-2.gif");// 指定输出路径
+		String substring = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 10);
+		String path = "D:/"+substring+".gif";
+		File outputFile = new File(path);// 指定输出路径
 
 		MatrixToImageWriter.writeToFile(bitMatrix, format, outputFile);
+		return path;
 	}
-
-	public static void main(String[] args) throws Exception {
-		try {
-			Encode_QR_CODE();
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
-	}
-
 }

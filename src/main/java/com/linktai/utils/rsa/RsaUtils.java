@@ -31,9 +31,9 @@ public class RsaUtils {
 	public static final String SIGNATURE_ALGORITHM = "MD5withRSA";
 	public static final String PUBLICKEY = "publickey";
 	public static final String PRIVATEKEY = "privatekey";
-	
-	public static Map<String, Key> getKeys(){
-		HashMap<String,Key> hashMap = new HashMap<String, Key>();
+
+	public static Map<String, Key> getKeys() {
+		HashMap<String, Key> hashMap = new HashMap<String, Key>();
 		try {
 			KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(ALGORITHM);
 			keyPairGenerator.initialize(1024);
@@ -48,8 +48,9 @@ public class RsaUtils {
 		}
 		return null;
 	}
-	//公钥加密
-	public String encript(String data,Key publicKey) {
+
+	// 公钥加密
+	public static String encript(String data, Key publicKey) {
 		X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(publicKey.getEncoded());
 		try {
 			KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM);
@@ -73,8 +74,9 @@ public class RsaUtils {
 		}
 		return null;
 	}
-	//私钥解密
-	public byte[] decode(String encript,Key privateKey) {
+
+	// 私钥解密
+	public static byte[] decode(String encript, Key privateKey) {
 		PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(privateKey.getEncoded());
 		try {
 			KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM);
@@ -98,13 +100,15 @@ public class RsaUtils {
 		}
 		return null;
 	}
+
 	/**
 	 * 
-	 * @param data	已加密的数据
+	 * @param data
+	 *            已加密的数据
 	 * @param privateKey
 	 * @return
 	 */
-	public String sign(String data,Key privateKey) {
+	public static String sign(String data, Key privateKey) {
 		PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(privateKey.getEncoded());
 		try {
 			KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM);
@@ -125,8 +129,9 @@ public class RsaUtils {
 		}
 		return null;
 	}
-	
-	public boolean verify(String encript,Key publicKey,String sign) {
+
+	public static boolean verify(String encript, String sign) {
+		Key publicKey = getKeys().get(PUBLICKEY);
 		X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(publicKey.getEncoded());
 		try {
 			KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM);
@@ -146,29 +151,38 @@ public class RsaUtils {
 		}
 		return false;
 	}
-	
-	
+
 	public static String encoder(byte[] bs) {
 		return Base64.getEncoder().encodeToString(bs);
 	}
+
 	public static byte[] decode(String string) {
 		return Base64.getDecoder().decode(string);
 	}
-	
+
+	public static String createSign(String date) {
+		if (date != null) {
+			Map<String, Key> keys = getKeys();
+			String encript = encript(date, keys.get(PUBLICKEY));
+			String sign = sign(encript, keys.get(PRIVATEKEY));
+			return date;
+		}
+		return null;
+	}
+
 	@Test
 	public void test1() {
-		String aString = "456";
+		String aString = "";
 		Map<String, Key> keys = getKeys();
 		String encript = encript(aString, keys.get(PUBLICKEY));
 		String sign = sign(encript, keys.get(PRIVATEKEY));
 		System.out.println(sign);
-		
-		boolean verify = verify(encript, keys.get(PUBLICKEY), sign);
+
+		boolean verify = verify(encript, sign);
 		System.out.println(verify);
 		byte[] decode = decode(encript, keys.get(PRIVATEKEY));
 		String string = new String(decode);
 		System.out.println(string);
-		
-		
+
 	}
 }

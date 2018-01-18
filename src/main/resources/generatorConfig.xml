@@ -12,28 +12,28 @@
 		</commentGenerator>
 		<jdbcConnection
 			connectionURL="jdbc:mysql://localhost:3306/linktime?serverTimezone=UTC"
-			driverClass="com.mysql.cj.jdbc.Driver" password="" userId="root" />
+			driverClass="com.mysql.cj.jdbc.Driver" password="root" userId="root" />
 		<javaModelGenerator targetPackage="com.linktai.pojo"
 			targetProject="omise" />
 		<sqlMapGenerator targetPackage="com.linktai.pojo"
 			targetProject="omise" />
 		<javaClientGenerator targetPackage="com.linktai.dao"
 			targetProject="omise" type="XMLMAPPER" />
-		<table tableName="account_info" domainObjectName="AccountInfo"
-			enableCountByExample="false" enableUpdateByExample="false"
-			enableDeleteByExample="false" enableSelectByExample="false"
-			selectByExampleQueryId="false"></table>
+<!-- 		<table tableName="account_info" domainObjectName="AccountInfo" -->
+<!-- 			enableCountByExample="false" enableUpdateByExample="false" -->
+<!-- 			enableDeleteByExample="false" enableSelectByExample="false" -->
+<!-- 			selectByExampleQueryId="false"></table> -->
 		<table tableName="edcon_charges" domainObjectName="Charges"
 			enableCountByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" enableSelectByExample="false"
 			selectByExampleQueryId="false"></table>
-		<table tableName="edcon_ticket" domainObjectName="Ticket"
-			enableCountByExample="false" enableUpdateByExample="false"
-			enableDeleteByExample="false" enableSelectByExample="false"
-			selectByExampleQueryId="false"></table>
-		<table tableName="managers" domainObjectName="Managers"
-			enableCountByExample="false" enableUpdateByExample="false"
-			enableDeleteByExample="false" enableSelectByExample="false"
-			selectByExampleQueryId="false"></table>
+<!-- 		<table tableName="edcon_ticket" domainObjectName="Ticket" -->
+<!-- 			enableCountByExample="false" enableUpdateByExample="false" -->
+<!-- 			enableDeleteByExample="false" enableSelectByExample="false" -->
+<!-- 			selectByExampleQueryId="false"></table> -->
+<!-- 		<table tableName="managers" domainObjectName="Managers" -->
+<!-- 			enableCountByExample="false" enableUpdateByExample="false" -->
+<!-- 			enableDeleteByExample="false" enableSelectByExample="false" -->
+<!-- 			selectByExampleQueryId="false"></table> -->
 	</context>
 </generatorConfiguration>
