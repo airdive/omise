@@ -15,4 +15,6 @@ public interface ChargesMapper {
     List<Charges> findByPage(Map<String, Object> map);
     
     Integer findAllCount(Map<String, Object> map);
+    
+    Integer updateChargesInfo(Charges charges);
 }

@@ -6,4 +6,6 @@ public interface ManagersMapper {
     int insert(Managers record);
 
     int insertSelective(Managers record);
+    
+    Managers login(Managers managers);
 }

@@ -10,7 +10,7 @@ public class Charges {
 	private Integer chargesRental;
 
 	private Date chargesTime;
-	//½»Ò××´Ì¬±êÊ¶£¬ÓÃÓÚ¼ÇÂ¼ÊÇ·ñ¹ýÆÚ£¬²éÑ¯Ê±ÓÃ£¬0±íÊ¾Î´¹ýÆÚ£¬1±íÊ¾¹ýÆÚ
+	//ï¿½ï¿½ï¿½ï¿½×´Ì¬ï¿½ï¿½Ê¶ï¿½ï¿½ï¿½ï¿½ï¿½Ú¼ï¿½Â¼ï¿½Ç·ï¿½ï¿½ï¿½Ú£ï¿½ï¿½ï¿½Ñ¯Ê±ï¿½Ã£ï¿½0ï¿½ï¿½Ê¾Î´ï¿½ï¿½ï¿½Ú£ï¿½1ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½
 	private Integer chargesState;
 
 	private Integer issendmail;
@@ -200,4 +200,16 @@ public class Charges {
 	public void setNote(String note) {
 		this.note = note;
 	}
+
+	@Override
+	public String toString() {
+		return "Charges [chargesId=" + chargesId + ", ticketId=" + ticketId + ", chargesRental=" + chargesRental
+				+ ", chargesTime=" + chargesTime + ", chargesState=" + chargesState + ", issendmail=" + issendmail
+				+ ", chargesNumberOmise=" + chargesNumberOmise + ", zxingcodepath=" + zxingcodepath + ", sign=" + sign
+				+ ", isused=" + isused + ", cardnumber=" + cardnumber + ", name=" + name + ", country=" + country
+				+ ", company=" + company + ", position=" + position + ", email=" + email + ", telephone=" + telephone
+				+ ", note=" + note + "]";
+	}
+	
+	
 }

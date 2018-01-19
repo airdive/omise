@@ -6,8 +6,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.google.zxing.WriterException;
@@ -34,7 +36,8 @@ import co.omise.models.Token.Create;
 
 @Service
 public class ChargesServiceimpl implements IChargesService {
-
+	@Autowired
+	private StringRedisTemplate redisTemplate;
 	@Autowired
 	private ChargesMapper chargesMapper;
 	@Autowired
@@ -59,11 +62,13 @@ public class ChargesServiceimpl implements IChargesService {
 		return pageUtil;
 	}
 
-	public Map<String, String> charges(Charges charges, CardOfAc card1) {
-		if (charges == null || card1 == null) {
-			return null;
-		}
+	public Map<String, String> charges(String arg, CardOfAc card1) {
 		HashMap<String, String> hashMap = new HashMap<String, String>();
+		if (arg == null || card1 == null) {
+			hashMap.put("state", "1");
+			return hashMap;
+		}
+		Charges charges = (Charges) redisTemplate.opsForHash().get("account", arg);
 		Charge charge = null;
 		try {
 			Client client = new Client(PUBLIC_KEY, PRIVATE_KEY);
@@ -88,6 +93,7 @@ public class ChargesServiceimpl implements IChargesService {
 			charges.setIssendmail(0);
 			charges.setChargesNumberOmise(charge.getId());
 			charges.setIsused(0);
+			charges.setCardnumber(card1.getCardNumber());
 			int insert = chargesMapper.insert(charges);
 			// �ʼ�����
 			MyThread myThread = new MyThread(charges, card1);
@@ -164,9 +170,22 @@ public class ChargesServiceimpl implements IChargesService {
 
 	public Map<String, Integer> charges(Charges charges) {
 		charges.setChargesRental(0);
+		//自己生成OmiseNumber用于验证
+		String substring = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 10);
+		charges.setChargesNumberOmise("linkTime_"+substring);
 		int chargesid = chargesMapper.insert(charges);
 		HashMap<String, Integer> hashMap = new HashMap<String, Integer>();
 		hashMap.put("chargesid", chargesid);
+		MyThread myThread = new MyThread();
+		myThread.setCharges(charges);
+		myThread.start();
+		return hashMap;
+	}
+
+	public Map<String, String> updateChargesInfo(Charges charges) {
+		Integer info = chargesMapper.updateChargesInfo(charges);
+		HashMap<String,String> hashMap = new HashMap<String, String>();
+		hashMap.put("state", "0");
 		return hashMap;
 	}
 	

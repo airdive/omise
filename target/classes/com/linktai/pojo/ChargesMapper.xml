@@ -22,35 +22,60 @@
 		<result column="telephone" jdbcType="VARCHAR" property="telephone" />
 		<result column="note" jdbcType="VARCHAR" property="note" />
 	</resultMap>
-	<insert id="insert" useGeneratedKeys="true" keyProperty="chargesId" parameterType="com.linktai.pojo.Charges">
+	<insert id="insert" useGeneratedKeys="true" keyProperty="chargesId"
+		parameterType="com.linktai.pojo.Charges">
 		insert into edcon_charges ( ticket_id, charges_rental,
 		charges_time, charges_state, isSendmail,
-		charges_number_Omise, zxingCodePath, sign,
+		charges_number_Omise,
+		zxingCodePath, sign,
 		isUsed, cardNumber, name,
-		country, company, position,
+		country, company,
+		position,
 		email, telephone, note
 		)
 		values (#{ticketId,jdbcType=INTEGER},
 		#{chargesRental,jdbcType=INTEGER},
-		#{chargesTime,jdbcType=TIMESTAMP}, #{chargesState,jdbcType=INTEGER}, #{issendmail,jdbcType=INTEGER},
+		#{chargesTime,jdbcType=TIMESTAMP},
+		#{chargesState,jdbcType=INTEGER}, #{issendmail,jdbcType=INTEGER},
 		#{chargesNumberOmise,jdbcType=VARCHAR},
 		#{zxingcodepath,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR},
 		#{isused,jdbcType=INTEGER}, #{cardnumber,jdbcType=VARCHAR},
 		#{name,jdbcType=VARCHAR},
-		#{country,jdbcType=VARCHAR}, #{company,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR},
+		#{country,jdbcType=VARCHAR},
+		#{company,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR},
 		#{email,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR},
 		#{note,jdbcType=VARCHAR}
 		)
 	</insert>
 	<update id="updatePathAndSign" parameterType="com.linktai.pojo.Charges">
-		UPDATE edcon_charges SET zxingCodePath=#{zxingcodepath},sign=#{sign}
-		WHERE charges_number_Omise=#{chargesNumberOmise};
+		UPDATE
+		edcon_charges SET zxingCodePath=#{zxingcodepath},sign=#{sign}
+		WHERE
+		charges_number_Omise=#{chargesNumberOmise};
 	</update>
 	<select id="findByPage" parameterType="java.util.Map" resultMap="BaseResultMap">
-		SELECT charges_id,name,company,email,telephone,charges_time,isUsed
-		FROM edcon_charges WHERE charges_state=0
+		SELECT charges_id,
+		ticket_id,
+		charges_rental,
+		charges_time,
+		charges_state,
+		isSendmail,
+		charges_number_Omise,
+		zxingCodePath,
+		sign,
+		isUsed,
+		cardNumber,
+		name,
+		country,
+		company,
+		email,
+		telephone,
+		note
+		FROM
+		edcon_charges WHERE charges_state=0
 		<if test="select!=null">
-			AND match(name,country,company,position,email,telephone) against
+			AND match(name,country,company,position,email,telephone)
+			against
 			(#{select} IN BOOLEAN MODE )
 		</if>
 		LIMIT #{start},#{ps};
@@ -60,8 +85,16 @@
 		resultType="java.lang.Integer">
 		SELECT count(ticket_id) FROM edcon_charges WHERE charges_state=0
 		<if test="select!=null">
-			AND match(name,country,company,position,email,telephone) against
+			AND match(name,country,company,position,email,telephone)
+			against
 			(#{select} IN BOOLEAN MODE )
 		</if>
 	</select>
+	<update id="updateChargesInfo" parameterType="com.linktai.pojo.Charges">
+		UPDATE
+		edcon_charges
+		SET country = #{country}, company = #{company}, position = #{position}, email = #{email}, telephone
+		= #{telephone}
+		WHERE charges_id = #{chargesId};
+	</update>
 </mapper>

@@ -12,29 +12,7 @@
     values (#{id,jdbcType=INTEGER}, #{loginname,jdbcType=VARCHAR}, #{loginpsw,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.linktai.pojo.Managers">
-    insert into managers
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="loginname != null">
-        loginname,
-      </if>
-      <if test="loginpsw != null">
-        loginpsw,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="loginname != null">
-        #{loginname,jdbcType=VARCHAR},
-      </if>
-      <if test="loginpsw != null">
-        #{loginpsw,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
+  <select id="login" parameterType="com.linktai.pojo.Managers" resultType="com.linktai.pojo.Managers">
+  	SELECT id,loginname,loginpsw FROM managers WHERE loginname=#{loginname} AND loginpsw=#{loginpsw};
+  </select>
 </mapper>

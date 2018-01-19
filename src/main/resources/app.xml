@@ -12,11 +12,15 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 	<context:component-scan base-package="com.linktai"></context:component-scan>
 	<mvc:annotation-driven></mvc:annotation-driven>
+	
+	<mvc:resources location="/css/" mapping="/css/**"></mvc:resources>
+	
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
 		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver"></property>
-		<property name="url" value="jdbc:mysql://localhost:3306/linktime?serverTimezone=UTC"></property>
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/meetup?serverTimezone=UTC"></property>
 		<property name="username" value="root"></property>
-		<property name="password" value="root"></property>
+		<property name="password" value="P5zaiJOvUcc3bLyS"></property>
 	</bean>
 	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"></property>
@@ -31,4 +35,32 @@
 		<property name="basePackage" value="com.linktai.dao"></property>
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryBean"></property>
 	</bean>
+
+
+	<!-- redis 相关配置 -->
+	<bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxIdle" value="200" />
+		<property name="maxWaitMillis" value="10000" />
+		<property name="testOnBorrow" value="true" />
+	</bean>
+
+	<bean id="JedisConnectionFactory"
+		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+		<property name="hostName" value="localhost"></property>
+		<property name="port" value="6379"></property>
+		<property name="password" value="123"></property>
+		
+	</bean>
+
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+		<property name="connectionFactory" ref="JedisConnectionFactory" />
+	</bean>
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/charges/pageSpilt"/>
+			<mvc:mapping path="/charges/updateInfo"/>
+			<mvc:mapping path="/charges/giveTicket"/>
+			<bean class="com.linktai.utils.LoginIntercepter"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
 </beans>
