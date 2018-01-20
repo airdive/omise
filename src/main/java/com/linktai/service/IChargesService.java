@@ -17,5 +17,9 @@ public interface IChargesService {
 	Map<String, Integer> charges(Charges charges);
 	
 	Map<String, String> updateChargesInfo(Charges charges);
+	
+	Charges refound(Integer chargesId);
+	
+	boolean delete(Integer chargesId);
 
 }

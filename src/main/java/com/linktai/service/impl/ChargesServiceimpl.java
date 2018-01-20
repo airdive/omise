@@ -63,6 +63,7 @@ public class ChargesServiceimpl implements IChargesService {
 	}
 
 	public Map<String, String> charges(String arg, CardOfAc card1) {
+
 		HashMap<String, String> hashMap = new HashMap<String, String>();
 		if (arg == null || card1 == null) {
 			hashMap.put("state", "1");
@@ -72,16 +73,15 @@ public class ChargesServiceimpl implements IChargesService {
 		Charge charge = null;
 		try {
 			Client client = new Client(PUBLIC_KEY, PRIVATE_KEY);
-			// ���п���Ϣ
 			Create card = new Token.Create().card(new Card.Create().name(card1.getNameOnCard())
 					.number(card1.getCardNumber()).expiration(card1.getExpiryMonth(), card1.getExpiryYear())
 					.securityCode(card1.getSecurityCode()));
 			Token token = client.tokens().create(card);
-			// �¼��±�
-			// ����һ������
+
 			charge = client.charges().create(new Charge.Create().amount(100000) // THB 1,000.00
 					.currency("sgd").card(token.getId()));
 
+			Integer payTicket = ticketMapper.payTicket();
 			final String chargeid = charge.getId();
 
 			// ���׳ɹ��������������ݿ�,���׼�¼
@@ -95,10 +95,8 @@ public class ChargesServiceimpl implements IChargesService {
 			charges.setIsused(0);
 			charges.setCardnumber(card1.getCardNumber());
 			int insert = chargesMapper.insert(charges);
-			// �ʼ�����
 			MyThread myThread = new MyThread(charges, card1);
 			myThread.start();
-			// ǰ�˷���״̬
 			hashMap.put("state", "0");
 			return hashMap;
 		} catch (ClientException e) {
@@ -151,7 +149,7 @@ public class ChargesServiceimpl implements IChargesService {
 			try {
 				// ���ɶ�ά��,���ض�ά��·��
 				String path = ZxingUtils.Encode_QR_CODE(sign);
-				String file = Graphies.creatFile(path, "D:/tickets.png", "8001", charges.getName());
+				String file = Graphies.creatFile(path, "home/images/tickets.png", ""+charges.getChargesId(), charges.getName());
 				Mail mail = new Mail(charges.getEmail(), "你好", "购买成功---------------->", new Date(), new File(file));
 				// �����ʼ�
 				boolean sendMessage = MailUtils.sendMessage(mail);
@@ -170,9 +168,9 @@ public class ChargesServiceimpl implements IChargesService {
 
 	public Map<String, Integer> charges(Charges charges) {
 		charges.setChargesRental(0);
-		//自己生成OmiseNumber用于验证
+		// 自己生成OmiseNumber用于验证
 		String substring = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 10);
-		charges.setChargesNumberOmise("linkTime_"+substring);
+		charges.setChargesNumberOmise("linkTime_" + substring);
 		int chargesid = chargesMapper.insert(charges);
 		HashMap<String, Integer> hashMap = new HashMap<String, Integer>();
 		hashMap.put("chargesid", chargesid);
@@ -184,10 +182,22 @@ public class ChargesServiceimpl implements IChargesService {
 
 	public Map<String, String> updateChargesInfo(Charges charges) {
 		Integer info = chargesMapper.updateChargesInfo(charges);
-		HashMap<String,String> hashMap = new HashMap<String, String>();
+		HashMap<String, String> hashMap = new HashMap<String, String>();
 		hashMap.put("state", "0");
 		return hashMap;
 	}
-	
+
+	public Charges refound(Integer chargesId) {
+		HashMap<String,Integer> hashMap = new HashMap<String,Integer>();
+		Integer put = hashMap.put("chargesId", chargesId);
+		Charges charges = chargesMapper.findChargesByChargesId(hashMap);
+		
+		return charges;
+	}
+
+	public boolean delete(Integer chargesId) {
+		
+		return false;
+	}
 
 }

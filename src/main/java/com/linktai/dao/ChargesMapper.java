@@ -17,4 +17,6 @@ public interface ChargesMapper {
     Integer findAllCount(Map<String, Object> map);
     
     Integer updateChargesInfo(Charges charges);
+    
+    Charges findChargesByChargesId(Map<String, Integer> map) ;
 }

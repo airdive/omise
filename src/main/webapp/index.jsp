@@ -9,7 +9,7 @@
 <body>
 	这是主页
 	<form name="checkoutForm" method="post"
-		action="http://192.168.50.119:8080/omise/charges/pay">
+		action="http://47.89.244.202:8080/omise/charges/accountInfo">
 		<div class="field half first">
 			<label for="name">姓名</label> <input type="text" name="name" id="name"
 				required />

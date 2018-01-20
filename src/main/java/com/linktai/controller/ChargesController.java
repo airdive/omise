@@ -1,13 +1,10 @@
 package com.linktai.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -22,6 +19,11 @@ import com.linktai.pojo.CardOfAc;
 import com.linktai.pojo.Charges;
 import com.linktai.service.IChargesService;
 import com.linktai.utils.PageUtil;
+
+import co.omise.Client;
+import co.omise.ClientException;
+import co.omise.models.OmiseException;
+import co.omise.models.Refund;
 
 @Controller
 @RequestMapping("charges")
@@ -39,36 +41,23 @@ public class ChargesController {
 	 * @return
 	 */
 	@RequestMapping(value = "pay")
-	public void charges(String para, CardOfAc cardOfAc, HttpServletResponse response) {
+	@ResponseBody
+	public Map<String, String> charges(String para, CardOfAc cardOfAc) {
 		Map<String, String> map = chargesService.charges(para, cardOfAc);
-		String string = JSON.toJSONString(map);
-		response.setHeader("Access-Control-Allow-origin", "*");
-		try {
-			response.getWriter().println(string);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		return map;
 	}
 
 	@RequestMapping(value = "accountInfo")
-	public void charges1(Charges charges, HttpServletResponse response) {
+	@ResponseBody
+	public Map<String, String> charges1(Charges charges) {
 		System.out.println(charges);
 		HashMap<String, String> hashMap = new HashMap<String, String>();
 		String substring = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 10);
 		hashMap.put("para", substring);
 		String string = JSON.toJSONString(charges);
-		response.setHeader("Access-Control-Allow-origin", "*");
 		redisTemplate.expire("account", 30, TimeUnit.MINUTES);
 		redisTemplate.opsForHash().put("account", substring, string);
-
-		try {
-			PrintWriter writer = response.getWriter();
-			writer.println(JSON.toJSONString(hashMap));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		return hashMap;
 	}
 
 	@RequestMapping(value = "a")
@@ -112,6 +101,40 @@ public class ChargesController {
 	public Map<String, Integer> giveTicket(Charges charges) {
 		Map<String, Integer> map = chargesService.charges(charges);
 		return map;
+	}
+
+	/**
+	 * 退款
+	 */
+	@RequestMapping(value = "refound",method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, String> refound(Integer chargesId) {
+		HashMap<String,String> hashMap = new HashMap<String, String>();
+		Charges refound = chargesService.refound(chargesId);
+		Client client;
+		try {
+			client = new Client(IChargesService.PUBLIC_KEY, IChargesService.PRIVATE_KEY);
+			Refund refund = client.charge(refound.getChargesNumberOmise()).refunds()
+					.create(new Refund.Create().amount(refound.getChargesRental()));
+			hashMap.put("state", "0");
+			return hashMap;
+		} catch (ClientException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (OmiseException e) {
+			e.printStackTrace();
+		}
+		hashMap.put("state", "1");
+		return hashMap;
+	}
+	
+	/**
+	 * 删除一条记录
+	 */
+	
+	public Map<String, String> deleteCharge(Integer chargesid){
+		return null;
 	}
 
 }

@@ -18,7 +18,7 @@ public class TicketController {
 	@ResponseBody
 	@RequestMapping("findNumber")
 	/**
-	 * ²éÑ¯Æ±ÊıÁ¿Óà¶î
+	 * æŸ¥è¯¢ç¥¨çš„æ•°é‡
 	 * @return
 	 */
 	public Map<String, Integer> findNumber() {

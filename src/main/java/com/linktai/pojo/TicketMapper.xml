@@ -23,6 +23,9 @@
 		SELECT id,time,number,location,price,image
 		FROM edcon_ticket WHERE time>=current_timestamp;
 	</select>
-
+	
+	<update id="payTicket">
+		UPDATE edcon_ticket SET number = number -1 WHERE time>current_timestamp AND number>=1;
+	</update>
 
 </mapper>

@@ -30,8 +30,8 @@ public class Graphies {
 			graphics.drawString(name, 636, 1023);// 绘制文字
 			graphics.dispose();
 			String substring = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 10);
-			ImageIO.write(image, "png", new File("D:/" + substring + ".png"));
-			return "D:/" + substring + ".png";
+			ImageIO.write(image, "png", new File("/home/images/tickets/" + substring + ".png"));
+			return "/home/images/tickets/" + substring + ".png";
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -97,4 +97,26 @@
 		= #{telephone}
 		WHERE charges_id = #{chargesId};
 	</update>
+	
+	<select id="findChargesByChargesId" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT charges_id,
+		ticket_id,
+		charges_rental,
+		charges_time,
+		charges_state,
+		isSendmail,
+		charges_number_Omise,
+		zxingCodePath,
+		sign,
+		isUsed,
+		cardNumber,
+		name,
+		country,
+		company,
+		email,
+		telephone,
+		note
+		FROM
+		edcon_charges WHERE charges_id = #{chargesId};
+	</select>
 </mapper>

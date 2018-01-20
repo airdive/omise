@@ -7,6 +7,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
@@ -27,7 +29,8 @@ public class ManagerController {
 
 	@RequestMapping(value = "login", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, String> login(Managers managers) {
+	public Map<String, String> login(Managers managers,HttpServletResponse response) {
+		response.setHeader("Access-Control-Allow-Origin", "*");
 		HashMap<String, String> hashMap = new HashMap<String, String>();
 		Managers login = managerService.login(managers);
 		if (login != null) {

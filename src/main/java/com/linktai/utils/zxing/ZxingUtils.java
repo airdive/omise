@@ -14,33 +14,33 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 public class ZxingUtils {
 	public static String Encode_QR_CODE(String contents) throws IOException, WriterException {
-		int width = 430; // ¶þÎ¬ÂëÍ¼Æ¬¿í¶È 300
-		int height = 430; // ¶þÎ¬ÂëÍ¼Æ¬¸ß¶È300
+		int width = 430; // ï¿½ï¿½Î¬ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ 300
+		int height = 430; // ï¿½ï¿½Î¬ï¿½ï¿½Í¼Æ¬ï¿½ß¶ï¿½300
 
-		String format = "gif";// ¶þÎ¬ÂëµÄÍ¼Æ¬¸ñÊ½ gif
+		String format = "gif";// ï¿½ï¿½Î¬ï¿½ï¿½ï¿½Í¼Æ¬ï¿½ï¿½Ê½ gif
 
 		Hashtable<EncodeHintType, Object> hints = new Hashtable<EncodeHintType, Object>();
-		// Ö¸¶¨¾À´íµÈ¼¶,¾À´í¼¶±ð£¨L 7%¡¢M 15%¡¢Q 25%¡¢H 30%£©
+		// Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¼ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½L 7%ï¿½ï¿½M 15%ï¿½ï¿½Q 25%ï¿½ï¿½H 30%ï¿½ï¿½
 		hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
-		// ÄÚÈÝËùÊ¹ÓÃ×Ö·û¼¯±àÂë
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
-		// hints.put(EncodeHintType.MAX_SIZE, 350);//ÉèÖÃÍ¼Æ¬µÄ×î´óÖµ
-		// hints.put(EncodeHintType.MIN_SIZE, 100);//ÉèÖÃÍ¼Æ¬µÄ×îÐ¡Öµ
-		hints.put(EncodeHintType.MARGIN, 1);// ÉèÖÃ¶þÎ¬Âë±ßµÄ¿Õ¶È£¬·Ç¸ºÊý
+		// hints.put(EncodeHintType.MAX_SIZE, 350);//ï¿½ï¿½ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
+		// hints.put(EncodeHintType.MIN_SIZE, 100);//ï¿½ï¿½ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½Ð¡Öµ
+		hints.put(EncodeHintType.MARGIN, 1);// ï¿½ï¿½ï¿½Ã¶ï¿½Î¬ï¿½ï¿½ßµÄ¿Õ¶È£ï¿½ï¿½Ç¸ï¿½ï¿½ï¿½
 
-		BitMatrix bitMatrix = new MultiFormatWriter().encode(contents, // Òª±àÂëµÄÄÚÈÝ
-				// ±àÂëÀàÐÍ£¬Ä¿Ç°zxingÖ§³Ö£ºAztec 2D,CODABAR 1D format,Code 39 1D,Code 93 1D ,Code 128 1D,
+		BitMatrix bitMatrix = new MultiFormatWriter().encode(contents, // Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+				// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½Ä¿Ç°zxingÖ§ï¿½Ö£ï¿½Aztec 2D,CODABAR 1D format,Code 39 1D,Code 93 1D ,Code 128 1D,
 				// Data Matrix 2D , EAN-8 1D,EAN-13 1D,ITF (Interleaved Two of Five) 1D,
 				// MaxiCode 2D barcode,PDF417,QR Code 2D,RSS 14,RSS EXPANDED,UPC-A 1D,UPC-E
 				// 1D,UPC/EAN extension,UPC_EAN_EXTENSION
-				BarcodeFormat.QR_CODE, width, // ÌõÐÎÂëµÄ¿í¶È
-				height, // ÌõÐÎÂëµÄ¸ß¶È
-				hints);// Éú³ÉÌõÐÎÂëÊ±µÄÒ»Ð©ÅäÖÃ,´ËÏî¿ÉÑ¡
+				BarcodeFormat.QR_CODE, width, // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½
+				height, // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¸ß¶ï¿½
+				hints);// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Ò»Ð©ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¡
 
-		// Éú³É¶þÎ¬Âë
+		// ï¿½ï¿½ï¿½É¶ï¿½Î¬ï¿½ï¿½
 		String substring = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 10);
-		String path = "D:/"+substring+".gif";
-		File outputFile = new File(path);// Ö¸¶¨Êä³öÂ·¾¶
+		String path = "/home/images/zxing/"+substring+".gif";
+		File outputFile = new File(path);// Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½
 
 		MatrixToImageWriter.writeToFile(bitMatrix, format, outputFile);
 		return path;
