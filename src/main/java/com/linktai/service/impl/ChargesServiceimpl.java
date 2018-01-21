@@ -165,7 +165,7 @@ public class ChargesServiceimpl implements IChargesService {
 			try {
 				// ���ɶ�ά��,���ض�ά��·��
 				String path = ZxingUtils.Encode_QR_CODE(sign);
-				String file = Graphies.creatFile(path, "images/ticket.png", "" + charges.getChargesId(),
+				String file = Graphies.creatFile(path,charges.getLang(), "" + charges.getChargesId(),
 						charges.getName());
 				Mail mail = new Mail(charges.getEmail(), null, null, new Date(), new File(file));
 

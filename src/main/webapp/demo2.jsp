@@ -23,6 +23,7 @@
 	<form name="checkoutForm" method="post"
 		action="https://api.baoming.in/omise/charges/accountInfo">
 		<input type="text" value="e52aa86921" name="para">
+		<input type="text" value="en" name="lang">
 		<div class="field half first">
 			<label for="name">姓名</label> <input type="text" name="name" id="name"
 				required value="cc" />
