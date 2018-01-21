@@ -57,10 +57,9 @@ public class ChargesServiceimpl implements IChargesService {
 		PageUtil<Charges> pageUtil = new PageUtil<Charges>(page, cp, ps, allPage);
 		return pageUtil;
 	}
-
+	
 	public Map<String, String> charges(String arg, CardOfAc card1) {
-		System.out.println(card1);
-
+		
 		HashMap<String, String> hashMap = new HashMap<String, String>();
 		
 
@@ -71,9 +70,13 @@ public class ChargesServiceimpl implements IChargesService {
 		String chargesJson = (String) redisTemplate.opsForHash().get("account", arg);
 		JSON parse = (JSON) JSON.parse(chargesJson);
 		Charges charges = JSON.toJavaObject(parse, Charges.class);
-		
+		/**
+		 * 清除数据，避免表单重复提交
+		 */
+		redisTemplate.opsForHash().delete("account", arg);
 		if (charges == null) {
-			hashMap.put("charges", "kkkkk");
+			//过期
+			hashMap.put("state", "3");
 			return hashMap;
 		}
 		
@@ -85,10 +88,10 @@ public class ChargesServiceimpl implements IChargesService {
 					.securityCode(card1.getSecurityCode()));
 			Token token = client.tokens().create(card);
 
-			charge = client.charges().create(new Charge.Create().amount(100000) // THB 1,000.00
-					.currency("sgd").card(token.getId()));
+			charge = client.charges().create(new Charge.Create().amount(3500) 
+					.currency("usd").card(token.getId()));
 			if (charge == null) {
-				hashMap.put("state", "kkkkkkkk");
+				hashMap.put("state", "1");
 				return hashMap;
 			}
 			Integer payTicket = ticketMapper.payTicket();
@@ -106,7 +109,7 @@ public class ChargesServiceimpl implements IChargesService {
 			charges.setCardnumber(card1.getCardNumber());
 			int insert = chargesMapper.insert(charges);
 			
-			hashMap.put("charges", charges.toString());
+//			hashMap.put("charges", charges.toString());
 			MyThread myThread = new MyThread(charges, card1);
 			myThread.start();
 			
@@ -159,22 +162,25 @@ public class ChargesServiceimpl implements IChargesService {
 
 		@Override
 		public void run() {
-			// ���ý��ױ������ǩ��
+			// 创建签名
 			String sign = RsaUtils.createSign(charges.getChargesNumberOmise());
 
 			try {
-				// ���ɶ�ά��,���ض�ά��·��
+				// 创建二维码
 				String path = ZxingUtils.Encode_QR_CODE(sign);
+				// 创建门票
 				String file = Graphies.creatFile(path,charges.getLang(), "" + charges.getChargesId(),
 						charges.getName());
 				Mail mail = new Mail(charges.getEmail(), null, null, new Date(), new File(file));
 
 				
-				// �����ʼ�
+				// 发送邮件
 				boolean sendMessage = MailUtils.sendMessage(mail,charges.getName(),charges.getLang());
-				// �޸�charges��Ϣ
+				// 设置图片路径存入数据库
 				charges.setZxingcodepath(file);
 				charges.setSign(sign);
+				charges.setIssendmail(1);
+				//修改图片路径以及邮件是否已发送状态
 				int updateCharges = chargesMapper.updatePathAndSign(charges);
 			} catch (IOException e) {
 				e.printStackTrace();

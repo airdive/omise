@@ -49,7 +49,7 @@ public class RsaUtils {
 		return null;
 	}
 
-	// ��Կ����
+	// ��Կ����
 	public static String encript(String data, Key publicKey) {
 		X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(publicKey.getEncoded());
 		try {
@@ -75,7 +75,7 @@ public class RsaUtils {
 		return null;
 	}
 
-	// ˽Կ����
+	// ˽Կ����
 	public static byte[] decode(String encript, Key privateKey) {
 		PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(privateKey.getEncoded());
 		try {
@@ -104,7 +104,7 @@ public class RsaUtils {
 	/**
 	 * 
 	 * @param data
-	 *            �Ѽ��ܵ�����
+	 *            �Ѽ��ܵ�����
 	 * @param privateKey
 	 * @return
 	 */
@@ -165,14 +165,17 @@ public class RsaUtils {
 			Map<String, Key> keys = getKeys();
 			String encript = encript(date, keys.get(PUBLICKEY));
 			String sign = sign(encript, keys.get(PRIVATEKEY));
-			return date;
+			return sign;
 		}
 		return null;
 	}
 
 	@Test
 	public void test1() {
-		String aString = "";
+		/**
+		 * 验证签名的时候通过票号获取到当前票的交易订单号，把加密后的订单号与签名验证
+		 */
+		String aString = "123";
 		Map<String, Key> keys = getKeys();
 		String encript = encript(aString, keys.get(PUBLICKEY));
 		String sign = sign(encript, keys.get(PRIVATEKEY));

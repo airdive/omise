@@ -57,6 +57,7 @@ public class ChargesController {
 		HashMap<String, String> hashMap = new HashMap<String, String>();
 		String substring = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 10);
 		hashMap.put("para", substring);
+		hashMap.put("lang", charges.getLang());
 		String string = JSON.toJSONString(charges);
 		redisTemplate.expire("account", 30, TimeUnit.MINUTES);
 		redisTemplate.opsForHash().put("account", substring, string);

@@ -19,8 +19,8 @@ import co.omise.models.Token;
 import co.omise.models.Token.Create;
 
 public class TestOmise {
-	private final static String PUBLIC_KEY="pkey_test_5an82rjt7doisbuipmv";
-	private final static String PRIVATE_KEY="skey_test_5an82rjtq9mefhky391";
+	final static String PUBLIC_KEY = "pkey_test_56bod6t9yl5li6whpfa";
+	final static String PRIVATE_KEY = "skey_test_56bod6tahnicxrvrxxq";
 	
 	public static void main(String[] args) {
 		try {
@@ -62,8 +62,8 @@ public class TestOmise {
 			System.out.println(token.getId());
 			//�¼��±�
 			//����һ������
-			Charge charge = client.charges().create(new Charge.Create().amount(100000) // THB 1,000.00
-					.currency("sgd").card(token.getId()));
+			Charge charge = client.charges().create(new Charge.Create().amount(100) // THB 1,000.00
+					.currency("usd").card(token.getId()));
 			
 			System.out.println("created charge: " + charge.getId());
 			

@@ -49,7 +49,7 @@
 	</insert>
 	<update id="updatePathAndSign" parameterType="com.linktai.pojo.Charges">
 		UPDATE
-		edcon_charges SET zxingCodePath=#{zxingcodepath},sign=#{sign}
+		edcon_charges SET zxingCodePath=#{zxingcodepath},sign=#{sign},isSendmail=#{issendmail}
 		WHERE
 		charges_number_Omise=#{chargesNumberOmise};
 	</update>
