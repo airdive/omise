@@ -9,30 +9,31 @@
 <body>
 	这是主页
 	<form name="checkoutForm" method="post"
-		action="http://47.89.244.202:8080/omise/charges/accountInfo">
+		action="https://api.baoming.in/omise/charges/pay">
+		<input type="text" value="e52aa86921" name="para">
 		<div class="field half first">
 			<label for="name">姓名</label> <input type="text" name="name" id="name"
-				required />
+				required value="cc"/>
 		</div>
 		<div class="field half ">
 			<label for="country">国家</label> <input type="text" name="country"
-				id="country" required />
+				id="country" required value="cc"/>
 		</div>
 		<div class="field half first">
 			<label for="company">公司</label> <input type="text" name="company"
-				id="company" required />
+				id="company" required value="cc"/>
 		</div>
 		<div class="field half">
 			<label for="position">职位</label> <input type="text" name="position"
-				id="position" required />
+				id="position" required value="cc"/>
 		</div>
 		<div class="field half first">
 			<label for="telephone">电话</label> <input type="text" name="telephone"
-				id="telephone" required />
+				id="telephone" required value="cc"/>
 		</div>
 		<div class="field half">
 			<label for="email">邮箱</label> <input type="text" name="email"
-				id="email" required />
+				id="email" required value="571740367@qq.com"/>
 		</div>
 		<div class="field">
 			<label for="note">备注(选填)</label>
@@ -67,7 +68,7 @@
 						<div class="OmiseCheckoutForm_formItem">
 							<label>Card number</label>
 							<div class="relative">
-								<input type="tel" placeholder="•••• •••• •••• ••••" value=""
+								<input type="tel" placeholder="4242424242424242" value="4242424242424242"
 									name="cardNumber" class="" pattern="[0-9]*" autocomplete="off">
 								<div class="OmiseCheckoutForm_cardTypeImage">
 									<img
@@ -86,17 +87,17 @@
 						</div>
 						<div class="OmiseCheckoutForm_formItem">
 							<label>Name on card</label> <input type="text"
-								placeholder="Full name" value="" name="nameOnCard" class=""
+								placeholder="Full name" value="JOHN DOE" name="nameOnCard" class=""
 								autocomplete="off">
 						</div>
 						<div class="OmiseCheckoutForm_formItemCol">
 							<div class="OmiseCheckoutForm_formItem">
 								<label>Expiry date</label> <input type="tel" placeholder="MM"
-									value="" name="expiryMonth" class="exdate" autocomplete="off"
+									value="1" name="expiryMonth" class="exdate" autocomplete="off"
 									onkeyup="this.value=this.value.replace(/[^\d]/g,'') "
 									onafterpaste="this.value=this.value.replace(/[^\d]/g,'') "
 									maxlength="2"> <input type="tel" placeholder="YYYY"
-									value="" name="expiryYear" class="exdate" autocomplete="off"
+									value="2020" name="expiryYear" class="exdate" autocomplete="off"
 									onkeyup="this.value=this.value.replace(/[^\d]/g,'') "
 									onafterpaste="this.value=this.value.replace(/[^\d]/g,'') "
 									maxlength="4">
@@ -106,7 +107,7 @@
 						<div class="OmiseCheckoutForm_formItem">
 							<label>Security code</label>
 							<div class="relative">
-								<input type="password" value="" name="securityCode"
+								<input type="password" value="123" name="securityCode"
 									placeholder="•••" class="securityCo" maxlength="3"
 									pattern="[0-9]*" autocomplete="off">
 								<div class="sc-dnqmqq LruVg">

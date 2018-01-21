@@ -1,5 +1,8 @@
 package com.omise.test;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -31,7 +34,7 @@ public class TestOmise {
 			System.out.println(email);
 
 			long total = client.balance().get().getTotal();
-			System.out.println("Óà¶î£º" + total);
+			System.out.println("ï¿½ï¿½î£º" + total);
 		} catch (ClientException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -43,12 +46,12 @@ public class TestOmise {
 			e.printStackTrace();
 		}
 	}
-	//½»Ò×²âÊÔ
+	//ï¿½ï¿½ï¿½×²ï¿½ï¿½ï¿½
 	@Test
 	public void test1() {
 		try {
 			Client client = new Client(PUBLIC_KEY,PRIVATE_KEY);
-			//ÒøĞĞ¿¨ĞÅÏ¢
+			//ï¿½ï¿½ï¿½Ğ¿ï¿½ï¿½ï¿½Ï¢
 			Create card = new Token.Create().card(new Card.Create()
 	                .name("JOHN DOE")
 	                .number("4242424242424242")
@@ -57,8 +60,8 @@ public class TestOmise {
 	        );
 			Token token = client.tokens().create(card);
 			System.out.println(token.getId());
-			//ĞÂ¼ÓÆÂ±Ò
-			//·¢ÆğÒ»¸ö½»Ò×
+			//ï¿½Â¼ï¿½ï¿½Â±ï¿½
+			//ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			Charge charge = client.charges().create(new Charge.Create().amount(100000) // THB 1,000.00
 					.currency("sgd").card(token.getId()));
 			
@@ -72,18 +75,18 @@ public class TestOmise {
 			e.printStackTrace();
 		}
 	}
-	//ÍË¿î²âÊÔ
+	//ï¿½Ë¿ï¿½ï¿½ï¿½ï¿½
 	@Test
 	public void test2() {
 		Client client;
 		try {
 			client = new Client(PUBLIC_KEY,PRIVATE_KEY);
-			//¸ù¾İ¶©µ¥±àºÅÍË¿î
+			//ï¿½ï¿½ï¿½İ¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë¿ï¿½
 			Refund refund = client.charge("chrg_test_5anaadb9wm611rni7s8")
 					.refunds().create(new Refund.Create()
 							.amount(10000));
 			System.out.println("created refund: %s"+ refund.getId());
-			System.out.println("ÍË¿î³É¹¦");
+			System.out.println("ï¿½Ë¿ï¿½É¹ï¿½");
 		} catch (ClientException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -100,6 +103,12 @@ public class TestOmise {
 	public void test3() {
 		UUID randomUUID = UUID.randomUUID();
 		System.out.println(randomUUID.toString());
+		File directory = new File("");//è®¾å®šä¸ºå½“å‰æ–‡ä»¶å¤¹ 
+		try{ 
+		    System.out.println(directory.getCanonicalPath());//è·å–æ ‡å‡†çš„è·¯å¾„ 
+		    System.out.println(directory.getAbsolutePath());//è·å–ç»å¯¹è·¯å¾„ 
+		}catch(Exception e){} 
+		
 	}
 	
 

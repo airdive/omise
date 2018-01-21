@@ -7,8 +7,8 @@ import com.linktai.pojo.Charges;
 import com.linktai.utils.PageUtil;
 
 public interface IChargesService {
-	final static String PUBLIC_KEY = "pkey_test_56bod6t9yl5li6whpfa";
-	final static String PRIVATE_KEY = "skey_test_56bod6tahnicxrvrxxq";
+	final static String PUBLIC_KEY = "pkey_test_5an82rjt7doisbuipmv";
+	final static String PRIVATE_KEY = "skey_test_5an82rjtq9mefhky391";
 
 	PageUtil<Charges> listPage(Integer cp, Integer ps, String select);
 

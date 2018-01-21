@@ -10,8 +10,8 @@ import javax.imageio.ImageIO;
 import com.google.zxing.common.BitMatrix;
 
 public class MatrixToImageWriter {
-	private static final int BLACK = 0xFF000000;//ÓÃÓÚÉèÖÃÍ¼°¸µÄÑÕÉ«  
-    private static final int WHITE = 0xFFFFFFFF; //ÓÃÓÚ±³¾°É«  
+	private static final int BLACK = 0xFF000000;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«  
+    private static final int WHITE = 0xFFFFFFFF; //ï¿½ï¿½ï¿½Ú±ï¿½ï¿½ï¿½É«  
   
     private MatrixToImageWriter() {  
     }  
@@ -31,20 +31,21 @@ public class MatrixToImageWriter {
   
     public static void writeToFile(BitMatrix matrix, String format, File file) throws IOException {  
         BufferedImage image = toBufferedImage(matrix);  
-        //ÉèÖÃlogoÍ¼±ê  
-        LogoConfig logoConfig = new LogoConfig();  
-        image = logoConfig.LogoMatrix(image);  
-          
+        //ï¿½ï¿½ï¿½ï¿½logoÍ¼ï¿½ï¿½  
+//        LogoConfig logoConfig = new LogoConfig();  
+//        
+//        image = logoConfig.LogoMatrix(image);  
+        
         if (!ImageIO.write(image, format, file)) {  
             throw new IOException("Could not write an image of format " + format + " to " + file);  
         }else{  
-            System.out.println("Í¼Æ¬Éú³É³É¹¦£¡");  
+            System.out.println("æˆåŠŸ");  
         }  
     }  
   
     public static void writeToStream(BitMatrix matrix, String format, OutputStream stream) throws IOException {  
         BufferedImage image = toBufferedImage(matrix);  
-        //ÉèÖÃlogoÍ¼±ê  
+        //ï¿½ï¿½ï¿½ï¿½logoÍ¼ï¿½ï¿½  
         LogoConfig logoConfig = new LogoConfig();  
         image = logoConfig.LogoMatrix(image);  
           

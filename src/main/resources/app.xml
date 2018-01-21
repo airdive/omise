@@ -12,9 +12,9 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 	<context:component-scan base-package="com.linktai"></context:component-scan>
 	<mvc:annotation-driven></mvc:annotation-driven>
-	
+
 	<mvc:resources location="/css/" mapping="/css/**"></mvc:resources>
-	
+
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
 		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver"></property>
 		<property name="url"
@@ -49,7 +49,7 @@
 		<property name="hostName" value="localhost"></property>
 		<property name="port" value="6379"></property>
 		<property name="password" value="123"></property>
-		
+
 	</bean>
 
 	<bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
@@ -57,10 +57,18 @@
 	</bean>
 	<mvc:interceptors>
 		<mvc:interceptor>
-			<mvc:mapping path="/charges/pageSpilt"/>
-			<mvc:mapping path="/charges/updateInfo"/>
-			<mvc:mapping path="/charges/giveTicket"/>
+			<mvc:mapping path="/charges/pageSpilt" />
+			<mvc:mapping path="/charges/updateInfo" />
+			<mvc:mapping path="/charges/giveTicket" />
 			<bean class="com.linktai.utils.LoginIntercepter"></bean>
 		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**/*" />
+			<bean class="com.linktai.utils.KauYUIntercepter" />
+		</mvc:interceptor>
 	</mvc:interceptors>
+	<mvc:cors>
+		<mvc:mapping path="/**" allowed-origins="*"
+			allow-credentials="true" max-age="1800" allowed-methods="GET,POST,OPTIONS" />
+	</mvc:cors>
 </beans>

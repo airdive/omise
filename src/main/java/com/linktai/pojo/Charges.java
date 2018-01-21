@@ -38,6 +38,8 @@ public class Charges {
 	private String telephone;
 
 	private String note;
+	
+	private String lang;
 
 	public Charges() {
 		// TODO Auto-generated constructor stub
@@ -199,6 +201,16 @@ public class Charges {
 
 	public void setNote(String note) {
 		this.note = note;
+	}
+	
+	
+
+	public String getLang() {
+		return lang;
+	}
+
+	public void setLang(String lang) {
+		this.lang = lang;
 	}
 
 	@Override

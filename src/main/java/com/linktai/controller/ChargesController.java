@@ -1,6 +1,10 @@
 package com.linktai.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -9,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,7 +22,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 import com.linktai.pojo.CardOfAc;
 import com.linktai.pojo.Charges;
+import com.linktai.pojo.Mail;
 import com.linktai.service.IChargesService;
+import com.linktai.utils.MailUtils;
 import com.linktai.utils.PageUtil;
 
 import co.omise.Client;
@@ -40,6 +47,7 @@ public class ChargesController {
 	 * @param cardOfAc
 	 * @return
 	 */
+	@CrossOrigin(origins = "*", maxAge = 3600)
 	@RequestMapping(value = "pay")
 	@ResponseBody
 	public Map<String, String> charges(String para, CardOfAc cardOfAc) {
@@ -49,6 +57,7 @@ public class ChargesController {
 
 	@RequestMapping(value = "accountInfo")
 	@ResponseBody
+	@CrossOrigin(origins = "*", maxAge = 3600)
 	public Map<String, String> charges1(Charges charges) {
 		System.out.println(charges);
 		HashMap<String, String> hashMap = new HashMap<String, String>();
@@ -60,24 +69,13 @@ public class ChargesController {
 		return hashMap;
 	}
 
-	@RequestMapping(value = "a")
-	@ResponseBody
-	public Map<String, String> charges2() {
-		HashMap<String, String> hashMap = new HashMap<String, String>();
-		String substring = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 10);
-		hashMap.put("arg", substring);
-		redisTemplate.expire("account1", 10, TimeUnit.SECONDS);
-		redisTemplate.opsForValue().append("account1", "qw");
-		redisTemplate.opsForHash().put("account", substring, "111");
-		System.out.println("连接成功");
-		return hashMap;
-	}
 
 	/**
 	 * 分页
 	 */
 	@RequestMapping("pageSpilt")
 	@ResponseBody
+	@CrossOrigin(origins = "*", maxAge = 3600)
 	public PageUtil<Charges> pageSpilt(Integer cp, Integer ps, @RequestParam(required = false) String select) {
 		PageUtil<Charges> pageUtil = chargesService.listPage(cp, ps, select);
 		return pageUtil;
@@ -88,6 +86,7 @@ public class ChargesController {
 	 */
 	@RequestMapping(value = "updateInfo", method = RequestMethod.POST)
 	@ResponseBody
+	@CrossOrigin(origins = "*", maxAge = 3600)
 	public Map<String, String> updateChargesInfo(Charges charges) {
 		Map<String, String> info = chargesService.updateChargesInfo(charges);
 		return info;
@@ -98,6 +97,7 @@ public class ChargesController {
 	 */
 	@RequestMapping(value = "giveTicket", method = RequestMethod.POST)
 	@ResponseBody
+	@CrossOrigin(origins = "*", maxAge = 3600)
 	public Map<String, Integer> giveTicket(Charges charges) {
 		Map<String, Integer> map = chargesService.charges(charges);
 		return map;
@@ -108,6 +108,7 @@ public class ChargesController {
 	 */
 	@RequestMapping(value = "refound",method = RequestMethod.POST)
 	@ResponseBody
+	@CrossOrigin(origins = "*", maxAge = 3600)
 	public Map<String, String> refound(Integer chargesId) {
 		HashMap<String,String> hashMap = new HashMap<String, String>();
 		Charges refound = chargesService.refound(chargesId);
@@ -136,5 +137,7 @@ public class ChargesController {
 	public Map<String, String> deleteCharge(Integer chargesid){
 		return null;
 	}
+	
+	
 
 }

@@ -39,7 +39,7 @@ public class ZxingUtils {
 
 		// ���ɶ�ά��
 		String substring = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 10);
-		String path = "/home/images/zxing/"+substring+".gif";
+		String path = "images"+ File.separator +"zxing"+ File.separator +substring+".gif";
 		File outputFile = new File(path);// ָ�����·��
 
 		MatrixToImageWriter.writeToFile(bitMatrix, format, outputFile);

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,6 +30,7 @@ public class ManagerController {
 
 	@RequestMapping(value = "login", method = RequestMethod.POST)
 	@ResponseBody
+	@CrossOrigin(origins = "*", maxAge = 3600)
 	public Map<String, String> login(Managers managers,HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		HashMap<String, String> hashMap = new HashMap<String, String>();

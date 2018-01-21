@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSON;
 import com.google.zxing.WriterException;
 import com.linktai.dao.ChargesMapper;
 import com.linktai.dao.TicketMapper;
@@ -63,13 +64,24 @@ public class ChargesServiceimpl implements IChargesService {
 	}
 
 	public Map<String, String> charges(String arg, CardOfAc card1) {
+		System.out.println(card1);
 
 		HashMap<String, String> hashMap = new HashMap<String, String>();
+		
+
 		if (arg == null || card1 == null) {
 			hashMap.put("state", "1");
 			return hashMap;
 		}
-		Charges charges = (Charges) redisTemplate.opsForHash().get("account", arg);
+		String chargesJson = (String) redisTemplate.opsForHash().get("account", arg);
+		JSON parse = (JSON) JSON.parse(chargesJson);
+		Charges charges = JSON.toJavaObject(parse, Charges.class);
+		
+		if (charges == null) {
+			hashMap.put("charges", "kkkkk");
+			return hashMap;
+		}
+		
 		Charge charge = null;
 		try {
 			Client client = new Client(PUBLIC_KEY, PRIVATE_KEY);
@@ -80,7 +92,10 @@ public class ChargesServiceimpl implements IChargesService {
 
 			charge = client.charges().create(new Charge.Create().amount(100000) // THB 1,000.00
 					.currency("sgd").card(token.getId()));
-
+			if (charge == null) {
+				hashMap.put("state", "kkkkkkkk");
+				return hashMap;
+			}
 			Integer payTicket = ticketMapper.payTicket();
 			final String chargeid = charge.getId();
 
@@ -95,8 +110,13 @@ public class ChargesServiceimpl implements IChargesService {
 			charges.setIsused(0);
 			charges.setCardnumber(card1.getCardNumber());
 			int insert = chargesMapper.insert(charges);
+			
+			hashMap.put("charges", charges.toString());
 			MyThread myThread = new MyThread(charges, card1);
 			myThread.start();
+			
+			
+			
 			hashMap.put("state", "0");
 			return hashMap;
 		} catch (ClientException e) {
@@ -149,10 +169,13 @@ public class ChargesServiceimpl implements IChargesService {
 			try {
 				// ���ɶ�ά��,���ض�ά��·��
 				String path = ZxingUtils.Encode_QR_CODE(sign);
-				String file = Graphies.creatFile(path, "home/images/tickets.png", ""+charges.getChargesId(), charges.getName());
-				Mail mail = new Mail(charges.getEmail(), "你好", "购买成功---------------->", new Date(), new File(file));
+				String file = Graphies.creatFile(path, "images/ticket.png", "" + charges.getChargesId(),
+						charges.getName());
+				Mail mail = new Mail(charges.getEmail(), null, null, new Date(), new File(file));
+
+				
 				// �����ʼ�
-				boolean sendMessage = MailUtils.sendMessage(mail);
+				boolean sendMessage = MailUtils.sendMessage(mail,charges.getName(),charges.getLang());
 				// �޸�charges��Ϣ
 				charges.setZxingcodepath(file);
 				charges.setSign(sign);
@@ -188,15 +211,15 @@ public class ChargesServiceimpl implements IChargesService {
 	}
 
 	public Charges refound(Integer chargesId) {
-		HashMap<String,Integer> hashMap = new HashMap<String,Integer>();
+		HashMap<String, Integer> hashMap = new HashMap<String, Integer>();
 		Integer put = hashMap.put("chargesId", chargesId);
 		Charges charges = chargesMapper.findChargesByChargesId(hashMap);
-		
+
 		return charges;
 	}
 
 	public boolean delete(Integer chargesId) {
-		
+
 		return false;
 	}
 

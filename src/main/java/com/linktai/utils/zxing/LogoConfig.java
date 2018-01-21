@@ -12,17 +12,17 @@ import javax.imageio.ImageIO;
 
 public class LogoConfig {
 	/**
-	 * ÉèÖÃ logo
+	 * ï¿½ï¿½ï¿½ï¿½ logo
 	 * 
 	 * @param matrixImage
-	 *            Ô´¶þÎ¬ÂëÍ¼Æ¬
-	 * @return ·µ»Ø´øÓÐlogoµÄ¶þÎ¬ÂëÍ¼Æ¬
+	 *            Ô´ï¿½ï¿½Î¬ï¿½ï¿½Í¼Æ¬
+	 * @return ï¿½ï¿½ï¿½Ø´ï¿½ï¿½ï¿½logoï¿½Ä¶ï¿½Î¬ï¿½ï¿½Í¼Æ¬
 	 * @throws IOException
 	 * @author Administrator sangwenhao
 	 */
 	public BufferedImage LogoMatrix(BufferedImage matrixImage) throws IOException {
 		/**
-		 * ¶ÁÈ¡¶þÎ¬ÂëÍ¼Æ¬£¬²¢¹¹½¨»æÍ¼¶ÔÏó
+		 * ï¿½ï¿½È¡ï¿½ï¿½Î¬ï¿½ï¿½Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½
 		 */
 		Graphics2D g2 = matrixImage.createGraphics();
 
@@ -30,27 +30,27 @@ public class LogoConfig {
 		int matrixHeigh = matrixImage.getHeight();
 
 		/**
-		 * ¶ÁÈ¡LogoÍ¼Æ¬
+		 * ï¿½ï¿½È¡LogoÍ¼Æ¬
 		 */
-		BufferedImage logo = ImageIO.read(new File("D:\\log.png"));
+		BufferedImage logo = ImageIO.read(new File("images/log.png"));
 
-		// ¿ªÊ¼»æÖÆÍ¼Æ¬
-		g2.drawImage(logo, matrixWidth / 5 * 2, matrixHeigh / 5 * 2, matrixWidth / 5, matrixHeigh / 5, null);// »æÖÆ
+		// ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Í¼Æ¬
+		g2.drawImage(logo, matrixWidth / 5 * 2, matrixHeigh / 5 * 2, matrixWidth / 5, matrixHeigh / 5, null);// ï¿½ï¿½ï¿½ï¿½
 		BasicStroke stroke = new BasicStroke(5, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
-		g2.setStroke(stroke);// ÉèÖÃ±Ê»­¶ÔÏó
-		// Ö¸¶¨»¡¶ÈµÄÔ²½Ç¾ØÐÎ
+		g2.setStroke(stroke);// ï¿½ï¿½ï¿½Ã±Ê»ï¿½ï¿½ï¿½ï¿½ï¿½
+		// Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½Èµï¿½Ô²ï¿½Ç¾ï¿½ï¿½ï¿½
 		RoundRectangle2D.Float round = new RoundRectangle2D.Float(matrixWidth / 5 * 2, matrixHeigh / 5 * 2,
 				matrixWidth / 5, matrixHeigh / 5, 20, 20);
 		g2.setColor(Color.white);
-		g2.draw(round);// »æÖÆÔ²»¡¾ØÐÎ
+		g2.draw(round);// ï¿½ï¿½ï¿½ï¿½Ô²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-		// ÉèÖÃlogo ÓÐÒ»µÀ»ÒÉ«±ß¿ò
+		// ï¿½ï¿½ï¿½ï¿½logo ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½É«ï¿½ß¿ï¿½
 		BasicStroke stroke2 = new BasicStroke(1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
-		g2.setStroke(stroke2);// ÉèÖÃ±Ê»­¶ÔÏó
+		g2.setStroke(stroke2);// ï¿½ï¿½ï¿½Ã±Ê»ï¿½ï¿½ï¿½ï¿½ï¿½
 		RoundRectangle2D.Float round2 = new RoundRectangle2D.Float(matrixWidth / 5 * 2 + 2, matrixHeigh / 5 * 2 + 2,
 				matrixWidth / 5 - 4, matrixHeigh / 5 - 4, 20, 20);
 		g2.setColor(new Color(128, 128, 128));
-		g2.draw(round2);// »æÖÆÔ²»¡¾ØÐÎ
+		g2.draw(round2);// ï¿½ï¿½ï¿½ï¿½Ô²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 		g2.dispose();
 		matrixImage.flush();
