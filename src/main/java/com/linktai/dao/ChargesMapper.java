@@ -19,4 +19,6 @@ public interface ChargesMapper {
     Integer updateChargesInfo(Charges charges);
     
     Charges findChargesByChargesId(Map<String, Integer> map) ;
+    
+    Integer deleteAccount(Map<String, Integer> map);
 }

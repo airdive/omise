@@ -40,6 +40,8 @@ public class Charges {
 	private String note;
 	
 	private String lang;
+	
+	private Integer isdelete;
 
 	public Charges() {
 		// TODO Auto-generated constructor stub
@@ -211,6 +213,16 @@ public class Charges {
 
 	public void setLang(String lang) {
 		this.lang = lang;
+	}
+	
+	
+
+	public Integer getIsdelete() {
+		return isdelete;
+	}
+
+	public void setIsdelete(Integer isdelete) {
+		this.isdelete = isdelete;
 	}
 
 	@Override

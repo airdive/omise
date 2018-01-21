@@ -215,8 +215,10 @@ public class ChargesServiceimpl implements IChargesService {
 	}
 
 	public boolean delete(Integer chargesId) {
-
-		return false;
+		HashMap<String,Integer> hashMap = new HashMap<String, Integer>();
+		hashMap.put("chargesId", chargesId);
+		Integer deleteAccount = chargesMapper.deleteAccount(hashMap);
+		return true;
 	}
 
 }

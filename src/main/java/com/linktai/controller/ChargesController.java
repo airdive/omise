@@ -148,7 +148,10 @@ public class ChargesController {
 	 */
 	
 	public Map<String, String> deleteCharge(Integer chargesid){
-		return null;
+		boolean delete = chargesService.delete(chargesid);
+		HashMap<String,String> hashMap = new HashMap<String, String>();
+		String hashmap = hashMap.put("state", "0");
+		return hashMap;
 	}
 	
 	

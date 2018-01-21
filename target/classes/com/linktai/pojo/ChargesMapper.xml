@@ -72,7 +72,7 @@
 		telephone,
 		note
 		FROM
-		edcon_charges WHERE charges_state=0
+		edcon_charges WHERE charges_state=0 AND isdelete=0
 		<if test="select!=null">
 			AND match(name,country,company,position,email,telephone)
 			against
@@ -119,4 +119,8 @@
 		FROM
 		edcon_charges WHERE charges_id = #{chargesId};
 	</select>
+	
+	<update id="deleteAccount" parameterType="java.util.Map">
+		UPDATE edcon_charges SET isdelete=1 WHERE charges_id=#{chargesId};
+	</update>
 </mapper>
