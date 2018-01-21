@@ -1,10 +1,6 @@
 package com.linktai.controller;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -22,9 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 import com.linktai.pojo.CardOfAc;
 import com.linktai.pojo.Charges;
-import com.linktai.pojo.Mail;
 import com.linktai.service.IChargesService;
-import com.linktai.utils.MailUtils;
 import com.linktai.utils.PageUtil;
 
 import co.omise.Client;
@@ -76,8 +70,27 @@ public class ChargesController {
 	@RequestMapping("pageSpilt")
 	@ResponseBody
 	@CrossOrigin(origins = "*", maxAge = 3600)
-	public PageUtil<Charges> pageSpilt(Integer cp, Integer ps, @RequestParam(required = false) String select) {
-		PageUtil<Charges> pageUtil = chargesService.listPage(cp, ps, select);
+	public PageUtil<Charges> pageSpilt(PageUtil<Charges> page, @RequestParam(required = false) String select) {
+//		System.out.println(page.getCp()+"as");
+		System.out.println("进来了");
+		
+//		if(select==null || select.equals("")) {
+//			select = null;
+//		}else {
+//			select = select +"*";
+//		}
+		
+//		PageUtil<Charges> pageUtil = chargesService.listPage(page.getCp(), page.getPs(), null);
+		return null;
+	}
+	/**
+	 * 分页
+	 */
+	@RequestMapping("pageSpilt1")
+	@ResponseBody
+	@CrossOrigin(origins = "*", maxAge = 3600)
+	public PageUtil<Charges> pageSpilt1(Integer cp, Integer ps, @RequestParam(required = false) String select) {
+		PageUtil<Charges> pageUtil = chargesService.listPage(cp, ps, null);
 		return pageUtil;
 	}
 

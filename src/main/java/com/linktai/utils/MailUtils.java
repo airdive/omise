@@ -113,7 +113,7 @@ public class MailUtils {
 	@Test
 	public void test1() {
 		Mail mail = new Mail("571740367@qq.com", "","", new Date(), new File("D:/ticket.png"));
-		boolean sendMessage = sendMessage(mail,"as","cn");
+		boolean sendMessage = sendMessage(mail,"as",null);
 		System.out.println(sendMessage);
 	}
 

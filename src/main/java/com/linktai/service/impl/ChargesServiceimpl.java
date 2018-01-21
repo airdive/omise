@@ -46,11 +46,6 @@ public class ChargesServiceimpl implements IChargesService {
 
 	public PageUtil<Charges> listPage(Integer cp, Integer ps, String select) {
 		HashMap<String, Object> hashMap = new HashMap<String, Object>();
-		if (select != null && select != "") {
-			select = select + "*";
-		} else {
-			select = null;
-		}
 		hashMap.put("select", select);
 		Integer allCount = chargesMapper.findAllCount(hashMap);
 		System.out.println(allCount);
@@ -118,6 +113,7 @@ public class ChargesServiceimpl implements IChargesService {
 			
 			
 			hashMap.put("state", "0");
+			hashMap.put("lang", charges.getLang());
 			return hashMap;
 		} catch (ClientException e) {
 			e.printStackTrace();

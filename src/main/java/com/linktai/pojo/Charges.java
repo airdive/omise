@@ -220,8 +220,10 @@ public class Charges {
 				+ ", chargesNumberOmise=" + chargesNumberOmise + ", zxingcodepath=" + zxingcodepath + ", sign=" + sign
 				+ ", isused=" + isused + ", cardnumber=" + cardnumber + ", name=" + name + ", country=" + country
 				+ ", company=" + company + ", position=" + position + ", email=" + email + ", telephone=" + telephone
-				+ ", note=" + note + "]";
+				+ ", note=" + note + ", lang=" + lang + "]";
 	}
+
+	
 	
 	
 }
