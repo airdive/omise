@@ -41,9 +41,9 @@ public class ChargesController {
 	 * @param cardOfAc
 	 * @return
 	 */
-	@CrossOrigin(origins = "*", maxAge = 3600)
 	@RequestMapping(value = "pay")
 	@ResponseBody
+	@CrossOrigin(origins = "*", maxAge = 3600)
 	public Map<String, String> charges(String para, CardOfAc cardOfAc) {
 		Map<String, String> map = chargesService.charges(para, cardOfAc);
 		return map;
@@ -55,7 +55,7 @@ public class ChargesController {
 	public Map<String, String> charges1(Charges charges) {
 		System.out.println(charges);
 		HashMap<String, String> hashMap = new HashMap<String, String>();
-		String substring = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 10);
+		String substring = UUID.randomUUID().toString().replaceAll("-", "");
 		hashMap.put("para", substring);
 		hashMap.put("lang", charges.getLang());
 		String string = JSON.toJSONString(charges);

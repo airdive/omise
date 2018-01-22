@@ -29,21 +29,27 @@ public class Graphies {
 				BufferedImage bi = ImageIO.read(new FileInputStream(new File(zxingPath)));
 				Graphics2D graphics = image.createGraphics();
 				graphics.drawImage(read.getScaledInstance(1024, 1448, Image.SCALE_DEFAULT), 0, 0, null);
-				graphics.drawImage(bi.getScaledInstance(200, 200, Image.SCALE_DEFAULT), 706, 782, null);
+				graphics.drawImage(bi.getScaledInstance(200, 200, Image.SCALE_DEFAULT), 700, 782, null);
 				graphics.setColor(Color.black);
 				graphics.setFont(new Font("Arial Unicode MS", Font.PLAIN, 40));
 				graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,  
 	                    RenderingHints.VALUE_ANTIALIAS_ON);
-				graphics.drawString(no, 248, 827);// 绘制文字
-				if (name.length() >= 12) {
-					String name1 = name.substring(12, name.length() > 30 ? name.length() : 30);
-					name = name.substring(0, 12);
-					System.out.println(name1);
-					graphics.drawString(name1, 56, 938);
+				graphics.drawString(no, 256, 827);// 绘制文字
+				if (name.length() >= 15) {
+					if(name.charAt(15)==' ') {
+						String name1 = name.substring(15, name.length() > 30 ? name.length() : 30);
+						name = name.substring(0, 15);
+						graphics.drawString(name1, 56, 938);
+					}else {
+						int lastIndexOf = name.lastIndexOf(" ", 15);
+						String name1 = name.substring(lastIndexOf, name.length());
+						name = name.substring(0, lastIndexOf);
+						graphics.drawString(name1, 56, 938);
+					}
 				}
 				graphics.drawString(name, 275, 878);// 绘制文字
 				graphics.dispose();
-				String substring = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 10);
+				String substring = UUID.randomUUID().toString().replaceAll("-", "");
 				String path = "images/tickets/" + substring + ".png";
 				// String path = "d:/r.png";
 				ImageIO.write(image, "png", new File(path));
@@ -60,15 +66,15 @@ public class Graphies {
 				BufferedImage bi = ImageIO.read(new FileInputStream(new File(zxingPath)));
 				Graphics2D graphics = image.createGraphics();
 				graphics.drawImage(read.getScaledInstance(1024, 1448, Image.SCALE_DEFAULT), 0, 0, null);
-				graphics.drawImage(bi.getScaledInstance(200, 200, Image.SCALE_DEFAULT), 731, 786, null);
+				graphics.drawImage(bi.getScaledInstance(200, 200, Image.SCALE_DEFAULT), 693, 786, null);
 				graphics.setColor(Color.black);
 				graphics.setFont(new Font("Arial Unicode MS", Font.PLAIN, 40));
 				graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,  
 	                    RenderingHints.VALUE_ANTIALIAS_ON);
-				graphics.drawString(no, 266, 836);// 绘制文字
-				graphics.drawString(name, 305, 890);// 绘制文字
+				graphics.drawString(no, 267, 836);// 绘制文字
+				graphics.drawString(name, 306, 890);// 绘制文字
 				graphics.dispose();
-				String substring = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 10);
+				String substring = UUID.randomUUID().toString().replaceAll("-", "");
 				String path = "images/tickets/" + substring + ".png";
 				// String path = "d:/r.png";
 				ImageIO.write(image, "png", new File(path));

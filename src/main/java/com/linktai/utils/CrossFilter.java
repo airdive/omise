@@ -41,7 +41,7 @@ public class CrossFilter implements Filter {
 			response.addHeader("Access-Control-Allow-Origin", "*");
 			response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
 			response.addHeader("Access-Control-Allow-Headers", "Content-Type");
-			response.addHeader("Access-Control-Max-Age", "1800");// 30 min
+			response.addHeader("Access-Control-Max-Age", "3600");// 30 min
 		}
 		chain.doFilter(request, response);
 	}

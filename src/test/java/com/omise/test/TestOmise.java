@@ -8,6 +8,8 @@ import java.util.UUID;
 
 import org.junit.Test;
 
+import com.alibaba.fastjson.JSON;
+
 import co.omise.Client;
 import co.omise.ClientException;
 import co.omise.models.Account;
@@ -19,8 +21,8 @@ import co.omise.models.Token;
 import co.omise.models.Token.Create;
 
 public class TestOmise {
-	final static String PUBLIC_KEY = "pkey_test_56bod6t9yl5li6whpfa";
-	final static String PRIVATE_KEY = "skey_test_56bod6tahnicxrvrxxq";
+	final static String PUBLIC_KEY = "pkey_test_5an82rjt7doisbuipmv";
+	final static String PRIVATE_KEY = "skey_test_5an82rjtq9mefhky391";
 	
 	public static void main(String[] args) {
 		try {
@@ -62,10 +64,13 @@ public class TestOmise {
 			System.out.println(token.getId());
 			//�¼��±�
 			//����һ������
-			Charge charge = client.charges().create(new Charge.Create().amount(100) // THB 1,000.00
-					.currency("usd").card(token.getId()));
-			
+			Charge charge = client.charges().create(new Charge.Create().amount(100000) // THB 1,000.00
+					.currency("sgd").card(token.getId()));
+			System.out.println(charge==null);
 			System.out.println("created charge: " + charge.getId());
+			System.out.println("mes: " + JSON.toJSONString(charge));
+			System.out.println("failecode " + charge.getFailureCode());
+			System.out.println("failemsg " + charge.getFailureMessage());
 			
 		} catch (ClientException e) {
 			e.printStackTrace();

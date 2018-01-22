@@ -14,7 +14,7 @@ import com.linktai.utils.zxing.MatrixToImageWriter;
 
 public class QrCodeDemo {
 	public static void Encode_QR_CODE() throws IOException, WriterException {
-		String contents = "process.start(http://www.sina.com.cn)"; // ��ά������
+		String contents = "process.start(http://www.sina.com.cn)process.start(http://www.sina.com.cn)process.start(http://www.sina.com.cn)process.start(http://www.sina.com.cn)process.start(http://www.sina.com.cn)process.start(http://www.sina.com.cn)process.start(http://www.sina.com.cn)process.start(http://www.sina.com.cn)process.start(http://www.sina.com.cn)process.start(http://www.sina.com.cn)process.start(http://www.sina.com.cn)process.start(http://www.sina.com.cn)"; // ��ά������
 		int width = 430; // ��ά��ͼƬ��� 300
 		int height = 430; // ��ά��ͼƬ�߶�300
 
@@ -39,7 +39,7 @@ public class QrCodeDemo {
 				hints);// ����������ʱ��һЩ����,�����ѡ
 
 		// ���ɶ�ά��
-		File outputFile = new File("d:/new-4.gif");// ָ�����·��
+		File outputFile = new File("d:/new-5.gif");// ָ�����·��
 
 		MatrixToImageWriter.writeToFile(bitMatrix, format, outputFile);
 	}
