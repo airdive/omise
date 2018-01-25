@@ -1,28 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.linktai.dao.FailInfoMapper">
-  <resultMap id="BaseResultMap" type="com.linktai.pojo.FailInfo">
-    <result column="id" jdbcType="INTEGER" property="id" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="country" jdbcType="VARCHAR" property="country" />
-    <result column="company" jdbcType="VARCHAR" property="company" />
-    <result column="position" jdbcType="VARCHAR" property="position" />
-    <result column="email" jdbcType="VARCHAR" property="email" />
-    <result column="telephine" jdbcType="VARCHAR" property="telephine" />
-    <result column="cardNumber4" jdbcType="VARCHAR" property="cardnumber4" />
-    <result column="failMessage" jdbcType="VARCHAR" property="failmessage" />
-    <result column="failtime" jdbcType="TIMESTAMP" property="failtime" />
-    <result column="failure_code" jdbcType="VARCHAR" property="failure_code" />
-  </resultMap>
-  <insert id="insert" parameterType="com.linktai.pojo.FailInfo">
-    insert into failInfo ( name, country, 
-      company, position, email, 
-      telephine, cardNumber4, failMessage, 
-      failtime,failure_code)
-    values ( #{name,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, 
-      #{company,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
-      #{telephine,jdbcType=VARCHAR}, #{cardnumber4,jdbcType=VARCHAR}, #{failmessage,jdbcType=VARCHAR}, 
-      #{failtime,jdbcType=TIMESTAMP},#{failure_code,jdbcType=VARCHAR})
-  </insert>
-  
+	<resultMap id="BaseResultMap" type="com.linktai.pojo.FailInfo">
+		<result column="id" jdbcType="INTEGER" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="country" jdbcType="VARCHAR" property="country" />
+		<result column="company" jdbcType="VARCHAR" property="company" />
+		<result column="position" jdbcType="VARCHAR" property="position" />
+		<result column="email" jdbcType="VARCHAR" property="email" />
+		<result column="telephine" jdbcType="VARCHAR" property="telephine" />
+		<result column="cardNumber4" jdbcType="VARCHAR" property="cardnumber4" />
+		<result column="failMessage" jdbcType="VARCHAR" property="failmessage" />
+		<result column="failtime" jdbcType="TIMESTAMP" property="failtime" />
+		<result column="failure_code" jdbcType="VARCHAR" property="failure_code" />
+		<result column="failnum" property="failnum"/>
+	</resultMap>
+	<insert id="insert" parameterType="com.linktai.pojo.FailInfo">
+		insert into failInfo ( name, country,
+		company, position, email,
+		telephine, cardNumber4, failMessage,
+		failtime,failure_code)
+		values ( #{name,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR},
+		#{company,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR},
+		#{email,jdbcType=VARCHAR},
+		#{telephine,jdbcType=VARCHAR}, #{cardnumber4,jdbcType=VARCHAR}, #{failmessage,jdbcType=VARCHAR},
+		#{failtime,jdbcType=TIMESTAMP},#{failure_code,jdbcType=VARCHAR})
+	</insert>
+	<select id="findFailInfo" parameterType="java.util.Map"
+		resultMap="BaseResultMap">
+		SELECT
+		id,name,country,company,position,email,telephine,cardNumber4,failMessage,failtime,failure_code,count(id) failnum
+		FROM failInfo
+		<if test="failCode!=null">
+			WHERE failure_code=#{failCode}
+		</if>
+		 GROUP BY name,failure_code ORDER BY id
+		 LIMIT #{start},#{ps};
+	</select>
+
+	<select id="findAllCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT count(DISTINCT name,failure_code) FROM failInfo
+		<if test="_parameter!=null">
+			WHERE failure_code=#{_parameter};
+		</if>
+	</select>
+
 </mapper>

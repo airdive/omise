@@ -8,4 +8,6 @@ public interface ManagersMapper {
     int insertSelective(Managers record);
     
     Managers login(Managers managers);
+    
+    Integer updatePWD(Managers managers);
 }

@@ -30,4 +30,10 @@ public class Managers {
     public void setLoginpsw(String loginpsw) {
         this.loginpsw = loginpsw;
     }
+
+	@Override
+	public String toString() {
+		return "Managers [id=" + id + ", loginname=" + loginname + ", loginpsw=" + loginpsw + "]";
+	}
+    
 }

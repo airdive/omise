@@ -21,6 +21,7 @@
 		<result column="email" jdbcType="VARCHAR" property="email" />
 		<result column="telephone" jdbcType="VARCHAR" property="telephone" />
 		<result column="note" jdbcType="VARCHAR" property="note" />
+		<result column="lang" jdbcType="VARCHAR" property="lang" />
 	</resultMap>
 	<insert id="insert" useGeneratedKeys="true" keyProperty="chargesId"
 		parameterType="com.linktai.pojo.Charges">
@@ -31,7 +32,7 @@
 		isUsed, cardNumber, name,
 		country, company,
 		position,
-		email, telephone, note
+		email, telephone, note,lang
 		)
 		values (#{ticketId,jdbcType=INTEGER},
 		#{chargesRental,jdbcType=INTEGER},
@@ -44,7 +45,7 @@
 		#{country,jdbcType=VARCHAR},
 		#{company,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR},
 		#{email,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR},
-		#{note,jdbcType=VARCHAR}
+		#{note,jdbcType=VARCHAR},#{lang,jdbcType=VARCHAR}
 		)
 	</insert>
 	<update id="updatePathAndSign" parameterType="com.linktai.pojo.Charges">
@@ -68,11 +69,43 @@
 		name,
 		country,
 		company,
+		position,
 		email,
 		telephone,
-		note
+		note,
+		lang
 		FROM
-		edcon_charges WHERE charges_state=0 AND isdelete=0
+		edcon_charges WHERE  isdelete=0 AND charges_rental>0
+		<if test="select!=null">
+			AND match(name,country,company,position,email,telephone)
+			against
+			(#{select} IN BOOLEAN MODE )
+		</if>
+		LIMIT #{start},#{ps};
+	</select>
+	
+	<select id="findByZP" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT charges_id,
+		ticket_id,
+		charges_rental,
+		charges_time,
+		charges_state,
+		isSendmail,
+		charges_number_Omise,
+		zxingCodePath,
+		sign,
+		isUsed,
+		cardNumber,
+		name,
+		country,
+		company,
+		position,
+		email,
+		telephone,
+		note,
+		lang
+		FROM
+		edcon_charges WHERE  isdelete=0 AND charges_rental=0
 		<if test="select!=null">
 			AND match(name,country,company,position,email,telephone)
 			against
@@ -83,7 +116,25 @@
 
 	<select id="findAllCount" parameterType="java.util.Map"
 		resultType="java.lang.Integer">
-		SELECT count(ticket_id) FROM edcon_charges WHERE charges_state=0
+		SELECT count(charges_id) FROM edcon_charges WHERE isdelete=0 AND charges_rental>0
+		<if test="select!=null">
+			AND match(name,country,company,position,email,telephone)
+			against
+			(#{select} IN BOOLEAN MODE )
+		</if>
+	</select>
+	<select id="findAllCountZP" parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT count(charges_id) FROM edcon_charges WHERE isdelete=0 AND charges_rental=0
+		<if test="select!=null">
+			AND match(name,country,company,position,email,telephone)
+			against
+			(#{select} IN BOOLEAN MODE )
+		</if>
+	</select>
+	<select id="findAllCountQD" parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT count(charges_id) FROM edcon_charges WHERE isdelete=0 AND charges_state!=0
 		<if test="select!=null">
 			AND match(name,country,company,position,email,telephone)
 			against
@@ -115,7 +166,8 @@
 		company,
 		email,
 		telephone,
-		note
+		note,
+		lang
 		FROM
 		edcon_charges WHERE charges_id = #{chargesId};
 	</select>
@@ -123,4 +175,34 @@
 	<update id="deleteAccount" parameterType="java.util.Map">
 		UPDATE edcon_charges SET isdelete=1 WHERE charges_id=#{chargesId};
 	</update>
+	
+	<select id="findByQD" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT charges_id,
+		ticket_id,
+		charges_rental,
+		charges_time,
+		charges_state,
+		isSendmail,
+		charges_number_Omise,
+		zxingCodePath,
+		sign,
+		isUsed,
+		cardNumber,
+		name,
+		country,
+		company,
+		position,
+		email,
+		telephone,
+		note,
+		lang
+		FROM
+		edcon_charges WHERE  isdelete=0 AND charges_state!=0
+		<if test="select!=null">
+			AND match(name,country,company,position,email,telephone)
+			against
+			(#{select} IN BOOLEAN MODE )
+		</if>
+		LIMIT #{start},#{ps};
+	</select>
 </mapper>

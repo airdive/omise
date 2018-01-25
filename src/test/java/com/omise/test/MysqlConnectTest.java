@@ -3,13 +3,20 @@ package com.omise.test;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Date;
+
+import org.junit.Test;
 
 public class MysqlConnectTest {
 	public static void main(String[] args) {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection connection = DriverManager.getConnection("jdbc:mysql://47.89.244.202:3306/wordpress", "root", "P5zaiJOvUcc3bLyS");
-			System.out.println("Á¬½Ó³É¹¦");
+			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/meetup?serverTimezone=Hongkong", "root", "root");
+			Statement statement = connection.createStatement();
+			boolean execute = statement.execute("INSERT INTO edcon_charges (ticket_id,name,charges_rental) VALUES (1,\"ä¸­å›½\",100)");
+			
+			System.out.println("æ’å…¥å®Œæˆ");
 			return;
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -18,6 +25,12 @@ public class MysqlConnectTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("Á¬½ÓÊ§°Ü");
+		System.out.println("ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½");
+	}
+	
+	@Test
+	public void test() {
+		Date date = new Date();
+		System.out.println(date);
 	}
 }

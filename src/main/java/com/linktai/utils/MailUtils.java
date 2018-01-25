@@ -28,7 +28,7 @@ public class MailUtils {
 	public static String myEmailPassword = "LinkTime123456";
 	public static String myEmailSMTPHost = "smtp.exmail.qq.com";
 	public static String subjectEn ="Payment Confirmation and E-ticket for Asia-Pacific Ethereum Community Meetup";
-	public static String ContentEn ="Hi, \r\n" + 
+	public  String ContentEn ="Hi, \r\n" + 
 			"\r\n" + 
 			"Thanks for your support to Asia-Pacific Ethereum Community Meetup!\r\n" + 
 			"We have received your payment, and attached is your personal E-ticket. Please note that the E-ticket is very important because with that you can get your personal name badge as the pass during the event. Each ticket can only be used once by the holder himself/herself, it shall not be sent, altered or transfered. \r\n" + 
@@ -41,9 +41,11 @@ public class MailUtils {
 			"Again, thank you for your participation. Have a nice day!\r\n" + 
 			"\r\n" + 
 			"Best regards\r\n" + 
-			"LinkTime\r\n";
-	public static String subjectCn ="亚太以太坊社区Meet up的门票信息";
-	public static String ContentCn ="您好！\r\n" + 
+			"\r\n" +
+			"LinkTime\r\n" +
+			"\r\n" ;
+	public  String subjectCn ="亚太以太坊社区Meet up的门票信息";
+	public  String ContentCn ="您好！\r\n" + 
 			"\r\n" + 
 			"非常感谢您对亚太以太坊社区Meet up的支持！\r\n" + 
 			"我们已经收到您的付款，附件是您个人的电子门票，门票仅限本人使用。请注意保管好您的门票并于入场时出示该门票。\r\n" + 
@@ -51,12 +53,30 @@ public class MailUtils {
 			"\r\n" + 
 			"网站: https://baoming.in/\r\n" + 
 			"Telegram: https://t.me/AsiaETHfans\r\n" + 
+			"\r\n" + 
 			"LinkTime\r\n" + 
+			"\r\n" + 
 			"";
 	
+	
 
+	public  String getSubjectEn() {
+		return subjectEn;
+	}
 
-	public static boolean sendMessage(Mail mail,String name,String lang) {
+	public  void setSubjectEn(String subjectEn) {
+		MailUtils.subjectEn = subjectEn;
+	}
+
+	public  String getContentEn() {
+		return ContentEn;
+	}
+
+	public  void setContentEn(String contentEn) {
+		ContentEn = contentEn;
+	}
+
+	public  boolean sendMessage(Mail mail,String name,String lang) {
 		Properties props = new Properties(); // ��������
 		props.setProperty("mail.transport.protocol", "smtp"); // ʹ�õ�Э�飨JavaMail�淶Ҫ��
 		props.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");

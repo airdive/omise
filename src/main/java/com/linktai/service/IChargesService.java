@@ -21,5 +21,12 @@ public interface IChargesService {
 	Charges refound(Integer chargesId);
 	
 	boolean delete(Integer chargesId);
+	
+	PageUtil<Charges> listPageZP(Integer cp, Integer ps, String select);
+	
+	public Map<String, String> sendMail(Integer chargesId);
+	
+	public Map<String, String> sendMailZP(Integer chargesId,String lang);
+	public Map<String, Integer> findAllCount();
 
 }

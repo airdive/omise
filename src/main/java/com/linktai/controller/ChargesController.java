@@ -43,15 +43,15 @@ public class ChargesController {
 	 */
 	@RequestMapping(value = "pay")
 	@ResponseBody
-	@CrossOrigin(origins = "*", maxAge = 3600)
 	public Map<String, String> charges(String para, CardOfAc cardOfAc) {
+		cardOfAc.setExpiryYear(cardOfAc.getExpiryYear()+2000);
 		Map<String, String> map = chargesService.charges(para, cardOfAc);
+		map.put("card", cardOfAc.toString());
 		return map;
 	}
 
 	@RequestMapping(value = "accountInfo")
 	@ResponseBody
-	@CrossOrigin(origins = "*", maxAge = 3600)
 	public Map<String, String> charges1(Charges charges) {
 		System.out.println(charges);
 		HashMap<String, String> hashMap = new HashMap<String, String>();
@@ -64,67 +64,32 @@ public class ChargesController {
 		return hashMap;
 	}
 
-
 	/**
 	 * 分页
 	 */
-	@RequestMapping("pageSpilt")
+	@RequestMapping(value = "pageSpilt1")
 	@ResponseBody
-	@CrossOrigin(origins = "*", maxAge = 3600)
-	public PageUtil<Charges> pageSpilt(PageUtil<Charges> page, @RequestParam(required = false) String select) {
-//		System.out.println(page.getCp()+"as");
-		System.out.println("进来了");
-		
-//		if(select==null || select.equals("")) {
-//			select = null;
-//		}else {
-//			select = select +"*";
-//		}
-		
-//		PageUtil<Charges> pageUtil = chargesService.listPage(page.getCp(), page.getPs(), null);
-		return null;
-	}
-	/**
-	 * 分页
-	 */
-	@RequestMapping("pageSpilt1")
-	@ResponseBody
-	@CrossOrigin(origins = "*", maxAge = 3600)
-	public PageUtil<Charges> pageSpilt1(Integer cp, Integer ps, @RequestParam(required = false) String select) {
-		PageUtil<Charges> pageUtil = chargesService.listPage(cp, ps, null);
+	public PageUtil<Charges> pageSpilt1(PageUtil<Charges> page, @RequestParam(required = false) String select) {
+		PageUtil<Charges> pageUtil = chargesService.listPage(page.getCp(), page.getPs(), select);
 		return pageUtil;
 	}
 
-	/**
-	 * 修改信息功能
-	 */
-	@RequestMapping(value = "updateInfo", method = RequestMethod.POST)
-	@ResponseBody
-	@CrossOrigin(origins = "*", maxAge = 3600)
-	public Map<String, String> updateChargesInfo(Charges charges) {
-		Map<String, String> info = chargesService.updateChargesInfo(charges);
-		return info;
-	}
+	
 
-	/**
-	 * 赠票,返回票号
-	 */
-	@RequestMapping(value = "giveTicket", method = RequestMethod.POST)
+	@RequestMapping(value = "pageSpiltZP")
 	@ResponseBody
-	@CrossOrigin(origins = "*", maxAge = 3600)
-	public Map<String, Integer> giveTicket(Charges charges) {
-		Map<String, Integer> map = chargesService.charges(charges);
-		return map;
+	public PageUtil<Charges> pageListZP(PageUtil<Charges> page, @RequestParam(required = false) String select) {
+		PageUtil<Charges> pageUtil = chargesService.listPageZP(page.getCp(), page.getPs(), select);
+		return pageUtil;
 	}
 
 	/**
 	 * 退款
 	 */
-	@RequestMapping(value = "refound",method = RequestMethod.POST)
+	@RequestMapping(value = "refound", method = RequestMethod.POST, produces = { "application/json;charset=utf-8" })
 	@ResponseBody
-	@CrossOrigin(origins = "*", maxAge = 3600)
 	public Map<String, String> refound(Integer chargesId) {
-		HashMap<String,String> hashMap = new HashMap<String, String>();
+		HashMap<String, String> hashMap = new HashMap<String, String>();
 		Charges refound = chargesService.refound(chargesId);
 		Client client;
 		try {
@@ -143,16 +108,44 @@ public class ChargesController {
 		hashMap.put("state", "1");
 		return hashMap;
 	}
-	
+
 	/**
 	 * 删除一条记录
 	 */
-	
-	public Map<String, String> deleteCharge(Integer chargesid){
-		boolean delete = chargesService.delete(chargesid);
-		HashMap<String,String> hashMap = new HashMap<String, String>();
-		String hashmap = hashMap.put("state", "0");
+	@RequestMapping(value = "deleteCharge")
+	@ResponseBody
+	public Map<String, String> deleteCharge(Integer chargesId) {
+		System.out.println(chargesId);
+		boolean delete = chargesService.delete(chargesId);
+		HashMap<String, String> hashMap = new HashMap<String, String>();
+		String hashmap = delete ? hashMap.put("state", "0") : hashMap.put("state", "1");
 		return hashMap;
+	}
+
+	@RequestMapping(value = "sendMail")
+	@ResponseBody
+	public Map<String, String> sendMail(Integer chargesId) {
+		Map<String, String> map = chargesService.sendMail(chargesId);
+		return map;
+	}
+
+	@RequestMapping(value = "sendMailZP")
+	@ResponseBody
+	public Map<String, String> sendMailZP(Integer chargesId,String lang) {
+		System.out.println(lang);
+		System.out.println("------------------------------>");
+		Map<String, String> map = chargesService.sendMailZP(chargesId,lang);
+		return map;
+	}
+	/**
+	 * 统计总票数，交易票数，赠票数
+	 * @return
+	 */
+	@RequestMapping(value="findAllCount")
+	@ResponseBody
+	public Map<String, Integer> findAllCount(){
+		Map<String, Integer> map = chargesService.findAllCount();
+		return map;
 	}
 	
 	

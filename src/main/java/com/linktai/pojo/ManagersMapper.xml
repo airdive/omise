@@ -15,4 +15,7 @@
   <select id="login" parameterType="com.linktai.pojo.Managers" resultType="com.linktai.pojo.Managers">
   	SELECT id,loginname,loginpsw FROM managers WHERE loginname=#{loginname} AND loginpsw=#{loginpsw};
   </select>
+  <update id="updatePWD" parameterType="com.linktai.pojo.Managers">
+  	UPDATE managers SET loginpsw=#{loginpsw} WHERE loginname=#{loginname};
+  </update>
 </mapper>

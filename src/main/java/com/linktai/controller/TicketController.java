@@ -18,7 +18,6 @@ public class TicketController {
 	private ITicketService ticketService;
 	@ResponseBody
 	@RequestMapping("findNumber")
-	@CrossOrigin(origins = "*", maxAge = 3600)
 	/**
 	 * 查询票的数量
 	 * @return

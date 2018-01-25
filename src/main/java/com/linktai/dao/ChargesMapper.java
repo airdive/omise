@@ -15,10 +15,16 @@ public interface ChargesMapper {
     List<Charges> findByPage(Map<String, Object> map);
     
     Integer findAllCount(Map<String, Object> map);
+    Integer findAllCountZP(Map<String, Object> map);
+    Integer findAllCountQD(Map<String, Object> map);
     
     Integer updateChargesInfo(Charges charges);
     
     Charges findChargesByChargesId(Map<String, Integer> map) ;
     
     Integer deleteAccount(Map<String, Integer> map);
+    
+    List<Charges> findByZP(Map<String, Object> map);
+    
+    List<Charges> findByQD(Map<String, Object> map);
 }

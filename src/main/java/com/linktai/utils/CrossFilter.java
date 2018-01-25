@@ -36,14 +36,12 @@ public class CrossFilter implements Filter {
 			throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) resp;
-		if (request.getHeader("Access-Control-Request-Method") != null && "OPTIONS".equals(request.getMethod())) {
-			// CORS "pre-flight" request
-			response.addHeader("Access-Control-Allow-Origin", "*");
-			response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-			response.addHeader("Access-Control-Allow-Headers", "Content-Type");
-			response.addHeader("Access-Control-Max-Age", "3600");// 30 min
-		}
-		chain.doFilter(request, response);
+		response.setHeader("Access-Control-Allow-Origin", "https://baoming.in");  
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");  
+        response.setHeader("Access-Control-Max-Age", "3600");  
+        response.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");  
+        response.setHeader("Access-Control-Allow-Credentials", "true");  
+		chain.doFilter(req, resp);
 	}
 
 	/**

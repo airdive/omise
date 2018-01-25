@@ -20,6 +20,8 @@ import org.junit.Test;
 public class Graphies {
 	private static String enBack = "images/ticket.png";
 	private static String cnBack = "images/tickets-cn.jpg";
+//	private static String enBack = "C:\\Users\\17770\\Desktop\\ticket.png";
+//	private static String cnBack = "C:\\Users\\17770\\Desktop\\tickets-cn.jpg";
 
 	public static String creatFile(String zxingPath, String lang, String no, String name) {
 		if (lang.equals("en")) {
@@ -51,7 +53,7 @@ public class Graphies {
 				graphics.dispose();
 				String substring = UUID.randomUUID().toString().replaceAll("-", "");
 				String path = "images/tickets/" + substring + ".png";
-				// String path = "d:/r.png";
+//				 String path = "d:/"+substring+".png";
 				ImageIO.write(image, "png", new File(path));
 				return path;
 			} catch (FileNotFoundException e) {
@@ -76,7 +78,7 @@ public class Graphies {
 				graphics.dispose();
 				String substring = UUID.randomUUID().toString().replaceAll("-", "");
 				String path = "images/tickets/" + substring + ".png";
-				// String path = "d:/r.png";
+//				 String path = "d:/"+substring+".png";
 				ImageIO.write(image, "png", new File(path));
 				return path;
 			} catch (FileNotFoundException e) {

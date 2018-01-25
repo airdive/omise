@@ -1,5 +1,6 @@
 package com.linktai.pojo;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class FailInfo {
@@ -24,6 +25,10 @@ public class FailInfo {
     private Date failtime;
     
     private String failure_code;
+    
+    private String dateFormat;
+    
+    private Integer failnum;
     
     public FailInfo() {
 		// TODO Auto-generated constructor stub
@@ -132,5 +137,26 @@ public class FailInfo {
 	public void setFailure_code(String failure_code) {
 		this.failure_code = failure_code;
 	}
+
+	public String getDateFormat() {
+		return dateFormat;
+	}
+
+	public void setDateFormat() {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		this.dateFormat = format.format(failtime);
+	}
+
+	public Integer getFailnum() {
+		return failnum;
+	}
+
+	public void setFailnum(Integer failnum) {
+		this.failnum = failnum;
+	}
+	
+	
+	
+	
     
 }

@@ -11,16 +11,18 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 	<context:component-scan base-package="com.linktai"></context:component-scan>
-	<mvc:annotation-driven></mvc:annotation-driven>
+	<mvc:annotation-driven>
+	</mvc:annotation-driven>
 
 	<mvc:resources location="/css/" mapping="/css/**"></mvc:resources>
 
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
 		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver"></property>
 		<property name="url"
-			value="jdbc:mysql://localhost:3306/meetup?serverTimezone=UTC"></property>
+			value="jdbc:mysql://localhost:3306/meetup?serverTimezone=Hongkong"></property>
 		<property name="username" value="root"></property>
 		<property name="password" value="P5zaiJOvUcc3bLyS"></property>
+<!-- 		<property name="password" value="root"></property> -->
 	</bean>
 	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"></property>
@@ -49,6 +51,7 @@
 		<property name="hostName" value="localhost"></property>
 		<property name="port" value="6379"></property>
 		<property name="password" value="123"></property>
+<!-- 		<property name="password" value=""></property> -->
 
 	</bean>
 
@@ -60,15 +63,26 @@
 			<mvc:mapping path="/charges/pageSpilt" />
 			<mvc:mapping path="/charges/updateInfo" />
 			<mvc:mapping path="/charges/giveTicket" />
+			<mvc:mapping path="/charges/sendMailZP" />
+			<mvc:mapping path="/charges/pageSpiltZP" />
+			<mvc:mapping path="/failInfo/**" />
+			<mvc:mapping path="/manager/updateInfo" />
+			<mvc:mapping path="/manager/giveTicket" />
+			
 			<bean class="com.linktai.utils.LoginIntercepter"></bean>
 		</mvc:interceptor>
-		<mvc:interceptor>
-			<mvc:mapping path="/**/*" />
-			<bean class="com.linktai.utils.KauYUIntercepter" />
-		</mvc:interceptor>
 	</mvc:interceptors>
+	
+	
+<!-- 	allowed-origins="https://baoming.in" -->
 	<mvc:cors>
-		<mvc:mapping path="/**" allowed-origins="*"
-			allow-credentials="true" max-age="1800" allowed-methods="GET,POST,OPTIONS" />
+		<mvc:mapping path="/**" allowed-origins="https://baoming.in"
+			allow-credentials="true" max-age="3600" allowed-methods="GET,POST,OPTIONS"
+			allowed-headers="Origin, X-Requested-With, Content-Type, Accept" />
 	</mvc:cors>
+	
+	
+	
+	
+	
 </beans>

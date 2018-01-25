@@ -10,8 +10,8 @@
 </script>
 <script type="text/javascript">
 	function c() {
-		$.post("http://192.168.50.119:8080/omise/charges/accountInfo", {
-			name : 'jack'
+		$.post("http://localhost:8080/omise/manager/updateInfo", {
+			chargesId : 8000,country:"中国",company:"宝马",position:"打算",telephone:"12222222",email:"eee@ss.com"
 		}, function(date) {
 			console.log(date);
 		});
