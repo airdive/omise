@@ -9,7 +9,7 @@
 <body>
 	这是主页
 	<form name="checkoutForm" method="post"
-		action="https://api.baoming.in/omise/charges/pay">
+		action="http://localhost:8080/omise/charges/pay">
 		<input type="text" value="e52aa86921" name="para">
 		<input type="text" value="cn" name="lang">
 		<div class="field half first">

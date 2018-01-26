@@ -16,11 +16,13 @@ import com.alibaba.fastjson.JSON;
 import com.google.zxing.WriterException;
 import com.linktai.dao.ChargesMapper;
 import com.linktai.dao.FailInfoMapper;
+import com.linktai.dao.MailInfoMapper;
 import com.linktai.dao.TicketMapper;
 import com.linktai.pojo.CardOfAc;
 import com.linktai.pojo.Charges;
 import com.linktai.pojo.FailInfo;
 import com.linktai.pojo.Mail;
+import com.linktai.pojo.MailInfo;
 import com.linktai.pojo.Ticket;
 import com.linktai.service.IChargesService;
 import com.linktai.utils.Graphies;
@@ -31,11 +33,8 @@ import com.linktai.utils.zxing.ZxingUtils;
 
 import co.omise.Client;
 import co.omise.ClientException;
-import co.omise.models.Card;
 import co.omise.models.Charge;
 import co.omise.models.OmiseException;
-import co.omise.models.Token;
-import co.omise.models.Token.Create;
 
 @Service
 public class ChargesServiceimpl implements IChargesService {
@@ -47,6 +46,8 @@ public class ChargesServiceimpl implements IChargesService {
 	private TicketMapper ticketMapper;
 	@Autowired
 	private FailInfoMapper failInfoMapper;
+	@Autowired
+	private MailInfoMapper mailInfoMapper;
 
 	public PageUtil<Charges> listPage(Integer cp, Integer ps, String select) {
 		HashMap<String, Object> hashMap = new HashMap<String, Object>();
@@ -67,11 +68,11 @@ public class ChargesServiceimpl implements IChargesService {
 		return pageUtil;
 	}
 
-	public Map<String, String> charges(String arg, CardOfAc card1) {
+	public Map<String, String> charges(String arg, String tokenId) {
 
 		HashMap<String, String> hashMap = new HashMap<String, String>();
 
-		if (arg == null || card1 == null) {
+		if (arg == null || tokenId == null) {
 			hashMap.put("state", "1");
 			return hashMap;
 		}
@@ -91,27 +92,25 @@ public class ChargesServiceimpl implements IChargesService {
 		Charge charge = null;
 		try {
 			Client client = new Client(PUBLIC_KEY, PRIVATE_KEY);
-			Create card = new Token.Create().card(new Card.Create().name(card1.getNameOnCard())
-					.number(card1.getCardNumber()).expiration(card1.getExpiryMonth(), card1.getExpiryYear())
-					.securityCode(card1.getSecurityCode()));
-			Token token = client.tokens().create(card);
+//			Create card = new Token.Create().card(new Card.Create().name(card1.getNameOnCard())
+//					.number(card1.getCardNumber()).expiration(card1.getExpiryMonth(), card1.getExpiryYear())
+//					.securityCode(card1.getSecurityCode()));
+//			Token token = client.tokens().create(card);
 
-			charge = client.charges().create(new Charge.Create().amount(3500).currency("usd").card(token.getId()));
+			charge = client.charges().create(new Charge.Create().amount(3500).currency("usd").card(tokenId));
 			if (!charge.getStatus().toString().equals("Successful")) {
 				// 交易失败
 				hashMap.put("state", "1");
 				hashMap.put("failureMessage", charge.getFailureMessage() == null ? null : charge.getFailureMessage());
 				FailInfo failInfo = new FailInfo(null, charges.getName(), charges.getCountry(), charges.getCompany(),
 						charges.getPosition(), charges.getEmail(), charges.getTelephone(),
-						card1.getCardNumber().substring(
-								card1.getCardNumber().length() > 4 ? card1.getCardNumber().length() - 4 : 0,
-								card1.getCardNumber().length()),
-						charge.getFailureMessage(), new Date(), charge.getFailureCode());
+						null,
+						charge.getFailureMessage(), new Date(), charge.getFailureCode(),charges.getLang());
 				int insert = failInfoMapper.insert(failInfo);
 				return hashMap;
 			}
 
-			MyThread myThread = new MyThread(charges, card1, charge);
+			MyThread myThread = new MyThread(charges, null, charge);
 			myThread.start();
 
 			hashMap.put("state", "0");
@@ -126,10 +125,8 @@ public class ChargesServiceimpl implements IChargesService {
 		}
 		FailInfo failInfo = new FailInfo(null, charges.getName(), charges.getCountry(), charges.getCompany(),
 				charges.getPosition(), charges.getEmail(), charges.getTelephone(),
-				card1.getCardNumber().substring(
-						card1.getCardNumber().length() > 4 ? card1.getCardNumber().length() - 4 : 0,
-						card1.getCardNumber().length()),
-				"失效信息，名称无效，号码无效或不支持品牌", new Date(), charge == null ? "失效信息，名称无效，号码无效或不支持品牌" : charge.getFailureCode());
+				null,
+				"失效信息，名称无效，号码无效或不支持品牌", new Date(), charge == null ? "失效信息，名称无效，号码无效或不支持品牌" : charge.getFailureCode(),charges.getLang());
 		int insert = failInfoMapper.insert(failInfo);
 		// 输入信息错误
 		hashMap.put("state", "1");
@@ -192,7 +189,7 @@ public class ChargesServiceimpl implements IChargesService {
 			charges.setIssendmail(0);
 			charges.setChargesNumberOmise(charge.getId());
 			charges.setIsused(0);
-			charges.setCardnumber(card1.getCardNumber());
+			charges.setCardnumber(null);
 			int insert = chargesMapper.insert(charges);
 
 			// 创建签名
@@ -209,23 +206,13 @@ public class ChargesServiceimpl implements IChargesService {
 
 				// 发送邮件
 				MailUtils mailUtils = new MailUtils();
-				mailUtils.setSubjectEn("Payment Confirmation and E-ticket for Asia-Pacific Ethereum Community Meetup");
-				mailUtils.setContentEn("Hi, \r\n" + 
-						"\r\n" + 
-						"Thanks for your support to Asia-Pacific Ethereum Community Meetup!\r\n" + 
-						"We have received your payment, and attached is your personal E-ticket. Please note that the E-ticket is very important because with that you can get your personal name badge as the pass during the event. Each ticket can only be used once by the holder himself/herself, it shall not be sent, altered or transfered. \r\n" + 
-						"With any questions, please email at: meetup@linktimetech.com\r\n" + 
-						"Updates will be announced in the following channels, and Don't forget to join our communities! :)\r\n" + 
-						"\r\n" + 
-						"Website: https://baoming.in/\r\n" + 
-						"Telegram: https://t.me/AsiaETHfans\r\n" + 
-						"\r\n" + 
-						"Again, thank you for your participation. Have a nice day!\r\n" + 
-						"\r\n" + 
-						"Best regards\r\n" + 
-						"LinkTime\r\n" + 
-						"\r\n" + 
-						"");
+				MailInfo payMail = mailInfoMapper.selectMail("pay");
+				MailInfo payMailCN = mailInfoMapper.selectMail("payCN");
+				
+				mailUtils.setSubjectEn(payMail.getSubject());
+				mailUtils.setContentEn(payMail.getContent());
+				mailUtils.setSubjectCn(payMailCN.getSubject());
+				mailUtils.setContentCn(payMailCN.getContent());
 				boolean sendMessage = mailUtils.sendMessage(mail, charges.getName(), charges.getLang());
 				if(!sendMessage) {
 					return;
@@ -288,15 +275,13 @@ public class ChargesServiceimpl implements IChargesService {
 
 				// 发送邮件
 				MailUtils mailUtils = new MailUtils();
-				mailUtils.setSubjectEn("Free pass ticket to Asia-Pacific Ethereum Community Meetup");
-				mailUtils.setContentEn("Hi, \r\n" + "\r\n"
-						+ "Thanks for your support to Asia-Pacific Ethereum Community Meetup!\r\n"
-						+ "Attached is your personal E-ticket. Please note that the E-ticket is very important because with that you can get your personal name badge as the pass during the event. \r\n"
-						+ "With any questions, please email at: meetup@linktimetech.com\r\n"
-						+ "Updates will be announced in the following channels, and Don't forget to join our communities! :)\r\n"
-						+ "\r\n" + "Website: https://baoming.in/\r\n" + "Telegram: https://t.me/AsiaETHfans\r\n"
-						+ "\r\n" + "Again, thank you for your participation. Have a nice day!\r\n" + "\r\n"
-						+ "Best regards\r\n" + "LinkTime\r\n" + "");
+				MailInfo payMail = mailInfoMapper.selectMail("pay");
+				MailInfo payMailCN = mailInfoMapper.selectMail("payCN");
+				
+				mailUtils.setSubjectEn(payMail.getSubject());
+				mailUtils.setContentEn(payMail.getContent());
+				mailUtils.setSubjectCn(payMailCN.getSubject());
+				mailUtils.setContentCn(payMailCN.getContent());
 				boolean sendMessage = mailUtils.sendMessage(mail, charges.getName(), charges.getLang());
 				if(!sendMessage) {
 					return;
@@ -406,6 +391,13 @@ public class ChargesServiceimpl implements IChargesService {
 
 			// 发送邮件
 			MailUtils mailUtils = new MailUtils();
+			MailInfo payMail = mailInfoMapper.selectMail("pay");
+			MailInfo payMailCN = mailInfoMapper.selectMail("payCN");
+			
+			mailUtils.setSubjectEn(payMail.getSubject());
+			mailUtils.setContentEn(payMail.getContent());
+			mailUtils.setSubjectCn(payMailCN.getSubject());
+			mailUtils.setContentCn(payMailCN.getContent());
 			boolean sendMessage = mailUtils.sendMessage(mail, charges.getName(), charges.getLang());
 			// 设置图片路径存入数据库
 			charges.setZxingcodepath(file);
@@ -449,23 +441,12 @@ public class ChargesServiceimpl implements IChargesService {
 			if(charges.getChargesRental()!=null && charges.getChargesRental()>0) {
 				System.out.println("交易额"+charges.getChargesRental());
 				MailUtils mailUtils = new MailUtils();
-				mailUtils.setSubjectEn("Payment Confirmation and E-ticket for Asia-Pacific Ethereum Community Meetup");
-				mailUtils.setContentEn("Hi, \r\n" + 
-						"\r\n" + 
-						"Thanks for your support to Asia-Pacific Ethereum Community Meetup!\r\n" + 
-						"We have received your payment, and attached is your personal E-ticket. Please note that the E-ticket is very important because with that you can get your personal name badge as the pass during the event. Each ticket can only be used once by the holder himself/herself, it shall not be sent, altered or transfered. \r\n" + 
-						"With any questions, please email at: meetup@linktimetech.com\r\n" + 
-						"Updates will be announced in the following channels, and Don't forget to join our communities! :)\r\n" + 
-						"\r\n" + 
-						"Website: https://baoming.in/\r\n" + 
-						"Telegram: https://t.me/AsiaETHfans\r\n" + 
-						"\r\n" + 
-						"Again, thank you for your participation. Have a nice day!\r\n" + 
-						"\r\n" + 
-						"Best regards\r\n" + 
-						"LinkTime\r\n" + 
-						"\r\n" + 
-						"");
+				MailInfo payMail = mailInfoMapper.selectMail("pay");
+				MailInfo payMailCN = mailInfoMapper.selectMail("payCN");
+				mailUtils.setSubjectEn(payMail.getSubject());
+				mailUtils.setContentEn(payMail.getContent());
+				mailUtils.setSubjectCn(payMailCN.getSubject());
+				mailUtils.setContentCn(payMailCN.getContent());
 				boolean sendMessage = mailUtils.sendMessage(mail, charges.getName(), lang);
 				if(!sendMessage) {
 					map.put("state", "1");
@@ -483,15 +464,12 @@ public class ChargesServiceimpl implements IChargesService {
 			}else {
 				// 发送邮件
 				MailUtils mailUtils = new MailUtils();
-				mailUtils.setSubjectEn("Free pass ticket to Asia-Pacific Ethereum Community Meetup");
-				mailUtils.setContentEn("Hi, \r\n" + "\r\n"
-						+ "Thanks for your support to Asia-Pacific Ethereum Community Meetup!\r\n"
-						+ "Attached is your personal E-ticket. Please note that the E-ticket is very important because with that you can get your personal name badge as the pass during the event. \r\n"
-						+ "With any questions, please email at: meetup@linktimetech.com\r\n"
-						+ "Updates will be announced in the following channels, and Don't forget to join our communities! :)\r\n"
-						+ "\r\n" + "Website: https://baoming.in/\r\n" + "Telegram: https://t.me/AsiaETHfans\r\n" + "\r\n"
-						+ "Again, thank you for your participation. Have a nice day!\r\n" + "\r\n" + "Best regards\r\n" 
-						+ "LinkTime\r\n" + "\r\n" + "");
+				MailInfo payMail = mailInfoMapper.selectMail("send");
+				MailInfo payMailCN = mailInfoMapper.selectMail("sendCN");
+				mailUtils.setSubjectEn(payMail.getSubject());
+				mailUtils.setContentEn(payMail.getContent());
+				mailUtils.setSubjectCn(payMailCN.getSubject());
+				mailUtils.setContentCn(payMailCN.getContent());
 				boolean sendMessage = mailUtils.sendMessage(mail, charges.getName(), lang);
 				if(!sendMessage) {
 					map.put("state", "1");

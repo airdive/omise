@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.Date;
 
 public class Mail {
-	//�ռ���
+	
 	private String recever;
 	private String subject;
 	private String content;

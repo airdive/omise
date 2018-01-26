@@ -73,7 +73,20 @@ public class Graphies {
 				graphics.setFont(new Font("Arial Unicode MS", Font.PLAIN, 40));
 				graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,  
 	                    RenderingHints.VALUE_ANTIALIAS_ON);
-				graphics.drawString(no, 267, 836);// 绘制文字
+				graphics.drawString(no, 267, 838);// 绘制文字
+				
+				if (name.length() >= 15) {
+					if(name.charAt(15)==' ') {
+						String name1 = name.substring(15, name.length() > 30 ? name.length() : 30);
+						name = name.substring(0, 15);
+						graphics.drawString(name1, 56, 938);
+					}else {
+						int lastIndexOf = name.lastIndexOf(" ", 15);
+						String name1 = name.substring(lastIndexOf, name.length());
+						name = name.substring(0, lastIndexOf);
+						graphics.drawString(name1, 146, 943);
+					}
+				}
 				graphics.drawString(name, 306, 890);// 绘制文字
 				graphics.dispose();
 				String substring = UUID.randomUUID().toString().replaceAll("-", "");

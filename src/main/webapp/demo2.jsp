@@ -21,7 +21,7 @@
 <body>
 	<button onclick="c()">按钮</button>
 	<form name="checkoutForm" method="post"
-		action="https://api.baoming.in/omise/charges/accountInfo">
+		action="http://localhost:8080/omise/charges/accountInfo">
 		<input type="text" value="e52aa86921" name="para">
 		<input type="text" value="en" name="lang">
 		<div class="field half first">

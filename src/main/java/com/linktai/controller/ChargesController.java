@@ -1,6 +1,7 @@
 package com.linktai.controller;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -43,10 +44,8 @@ public class ChargesController {
 	 */
 	@RequestMapping(value = "pay")
 	@ResponseBody
-	public Map<String, String> charges(String para, CardOfAc cardOfAc) {
-		cardOfAc.setExpiryYear(cardOfAc.getExpiryYear()+2000);
-		Map<String, String> map = chargesService.charges(para, cardOfAc);
-		map.put("card", cardOfAc.toString());
+	public Map<String, String> charges(String para, String tokenId) {
+		Map<String, String> map = chargesService.charges(para, tokenId);
 		return map;
 	}
 
@@ -70,15 +69,29 @@ public class ChargesController {
 	@RequestMapping(value = "pageSpilt1")
 	@ResponseBody
 	public PageUtil<Charges> pageSpilt1(PageUtil<Charges> page, @RequestParam(required = false) String select) {
+		if (select != null) {
+			try {
+				select = new String(select.toString().getBytes("ISO-8859-1"), "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		PageUtil<Charges> pageUtil = chargesService.listPage(page.getCp(), page.getPs(), select);
 		return pageUtil;
 	}
 
-	
-
 	@RequestMapping(value = "pageSpiltZP")
 	@ResponseBody
 	public PageUtil<Charges> pageListZP(PageUtil<Charges> page, @RequestParam(required = false) String select) {
+		if (select != null) {
+			try {
+				select = new String(select.toString().getBytes("ISO-8859-1"), "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		PageUtil<Charges> pageUtil = chargesService.listPageZP(page.getCp(), page.getPs(), select);
 		return pageUtil;
 	}
@@ -131,23 +144,21 @@ public class ChargesController {
 
 	@RequestMapping(value = "sendMailZP")
 	@ResponseBody
-	public Map<String, String> sendMailZP(Integer chargesId,String lang) {
-		System.out.println(lang);
-		System.out.println("------------------------------>");
-		Map<String, String> map = chargesService.sendMailZP(chargesId,lang);
+	public Map<String, String> sendMailZP(Integer chargesId, String lang) {
+		Map<String, String> map = chargesService.sendMailZP(chargesId, lang);
 		return map;
 	}
+
 	/**
 	 * 统计总票数，交易票数，赠票数
+	 * 
 	 * @return
 	 */
-	@RequestMapping(value="findAllCount")
+	@RequestMapping(value = "findAllCount")
 	@ResponseBody
-	public Map<String, Integer> findAllCount(){
+	public Map<String, Integer> findAllCount() {
 		Map<String, Integer> map = chargesService.findAllCount();
 		return map;
 	}
-	
-	
 
 }

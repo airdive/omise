@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.linktai.pojo.FailInfo;
 import com.linktai.service.IFailInfoService;
+import com.linktai.service.ManagerService;
 import com.linktai.utils.PageUtil;
 
 @RequestMapping("failInfo")
@@ -17,9 +18,12 @@ import com.linktai.utils.PageUtil;
 public class FailInfoController {
 	@Autowired
 	private IFailInfoService failInfoService;
+	@Autowired
+	private ManagerService managerService;
 	@RequestMapping(value = "listPageFail")
 	@ResponseBody
 	public PageUtil<FailInfo> listPageFail(PageUtil<FailInfo> page,String failCode){
+		managerService.updateReadState();
 		PageUtil<FailInfo> pageUtil = failInfoService.pagespilt(page.getCp(), page.getPs(), failCode);
 		return pageUtil;
 	}

@@ -12,7 +12,7 @@ public interface IChargesService {
 
 	PageUtil<Charges> listPage(Integer cp, Integer ps, String select);
 
-	Map<String, String> charges(String arg, CardOfAc card1);
+	Map<String, String> charges(String arg, String tokenId);
 
 	Map<String, Integer> charges(Charges charges);
 	

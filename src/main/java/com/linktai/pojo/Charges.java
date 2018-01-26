@@ -42,6 +42,8 @@ public class Charges {
 	private String lang;
 	
 	private Integer isdelete;
+	
+	private Date signTime;
 
 	public Charges() {
 		// TODO Auto-generated constructor stub
@@ -59,6 +61,21 @@ public class Charges {
 		this.zxingcodepath = zxingcodepath;
 		this.sign = sign;
 		this.isused = isused;
+	}
+	
+	
+
+	
+
+	public Charges(String name, String country, String company, String position, String email, String telephone,String lang) {
+		super();
+		this.name = name;
+		this.country = country;
+		this.company = company;
+		this.position = position;
+		this.email = email;
+		this.telephone = telephone;
+		this.lang = lang;
 	}
 
 	public Integer getChargesId() {
@@ -223,6 +240,16 @@ public class Charges {
 
 	public void setIsdelete(Integer isdelete) {
 		this.isdelete = isdelete;
+	}
+	
+	
+
+	public Date getSignTime() {
+		return signTime;
+	}
+
+	public void setSignTime(Date signTime) {
+		this.signTime = signTime;
 	}
 
 	@Override

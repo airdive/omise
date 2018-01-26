@@ -27,36 +27,10 @@ public class MailUtils {
 	public static String myEmailAccount = "meetup@linktimetech.com";
 	public static String myEmailPassword = "LinkTime123456";
 	public static String myEmailSMTPHost = "smtp.exmail.qq.com";
-	public static String subjectEn ="Payment Confirmation and E-ticket for Asia-Pacific Ethereum Community Meetup";
-	public  String ContentEn ="Hi, \r\n" + 
-			"\r\n" + 
-			"Thanks for your support to Asia-Pacific Ethereum Community Meetup!\r\n" + 
-			"We have received your payment, and attached is your personal E-ticket. Please note that the E-ticket is very important because with that you can get your personal name badge as the pass during the event. Each ticket can only be used once by the holder himself/herself, it shall not be sent, altered or transfered. \r\n" + 
-			"With any questions, please email at: meetup@linktimetech.com\r\n" + 
-			"Updates will be announced in the following channels, and Don't forget to join our communities! :)\r\n" + 
-			"\r\n" + 
-			"Website: https://baoming.in/\r\n" + 
-			"Telegram: https://t.me/AsiaETHfans\r\n" + 
-			"\r\n" + 
-			"Again, thank you for your participation. Have a nice day!\r\n" + 
-			"\r\n" + 
-			"Best regards\r\n" + 
-			"\r\n" +
-			"LinkTime\r\n" +
-			"\r\n" ;
-	public  String subjectCn ="亚太以太坊社区Meet up的门票信息";
-	public  String ContentCn ="您好！\r\n" + 
-			"\r\n" + 
-			"非常感谢您对亚太以太坊社区Meet up的支持！\r\n" + 
-			"我们已经收到您的付款，附件是您个人的电子门票，门票仅限本人使用。请注意保管好您的门票并于入场时出示该门票。\r\n" + 
-			"如果您有任何问题，请发邮件到meetup@linktimetech.com进行咨询。\r\n" + 
-			"\r\n" + 
-			"网站: https://baoming.in/\r\n" + 
-			"Telegram: https://t.me/AsiaETHfans\r\n" + 
-			"\r\n" + 
-			"LinkTime\r\n" + 
-			"\r\n" + 
-			"";
+	public String subjectEn;
+	public String ContentEn;
+	public String subjectCn;
+	public String ContentCn;
 	
 	
 
@@ -65,7 +39,7 @@ public class MailUtils {
 	}
 
 	public  void setSubjectEn(String subjectEn) {
-		MailUtils.subjectEn = subjectEn;
+		this.subjectEn = subjectEn;
 	}
 
 	public  String getContentEn() {
@@ -74,6 +48,24 @@ public class MailUtils {
 
 	public  void setContentEn(String contentEn) {
 		ContentEn = contentEn;
+	}
+	
+	
+
+	public String getSubjectCn() {
+		return subjectCn;
+	}
+
+	public void setSubjectCn(String subjectCn) {
+		this.subjectCn = subjectCn;
+	}
+
+	public String getContentCn() {
+		return ContentCn;
+	}
+
+	public void setContentCn(String contentCn) {
+		ContentCn = contentCn;
 	}
 
 	public  boolean sendMessage(Mail mail,String name,String lang) {

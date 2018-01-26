@@ -68,6 +68,13 @@
 			<mvc:mapping path="/failInfo/**" />
 			<mvc:mapping path="/manager/updateInfo" />
 			<mvc:mapping path="/manager/giveTicket" />
+			<mvc:mapping path="/manager/logout" />
+			<mvc:mapping path="/manager/updatePWD" />
+			<mvc:mapping path="/manager/pageSpiltQD" />
+			<mvc:mapping path="/manager/accountQD" />
+			<mvc:mapping path="/manager/findMailInfo" />
+			<mvc:mapping path="/manager/updateMailContent" />
+			<mvc:mapping path="/manager/addFailInfoToCharges" />
 			
 			<bean class="com.linktai.utils.LoginIntercepter"></bean>
 		</mvc:interceptor>

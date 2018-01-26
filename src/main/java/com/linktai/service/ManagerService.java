@@ -3,6 +3,7 @@ package com.linktai.service;
 import java.util.Map;
 
 import com.linktai.pojo.Charges;
+import com.linktai.pojo.MailInfo;
 import com.linktai.pojo.Managers;
 import com.linktai.utils.PageUtil;
 
@@ -13,4 +14,17 @@ public interface ManagerService {
 	PageUtil<Charges> pageListQD(Integer cp, Integer ps, String select);
 	
 	Map<String,Integer> accountQD();
+	
+	Map<String, String> updateMailContent(MailInfo mailInfo);
+	
+	Map<String, Integer> countNotRead();
+	
+	Map<String, String> updateReadState();
+	
+	Map<String, String> addFailInfoToCharges(Integer id,String name,String email);
+	
+	Map<String, String> verifySign(String sign);
+	
+	MailInfo findMailInfo(String name);
+	
 }

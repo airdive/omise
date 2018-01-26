@@ -30,12 +30,18 @@ public class FailInfo {
     
     private Integer failnum;
     
+    private String isread;
+    
+    private String lang;
+    
+    private String ishandle;
+    
     public FailInfo() {
 		// TODO Auto-generated constructor stub
 	}
 
     public FailInfo(Integer id, String name, String country, String company, String position, String email,
-			String telephine, String cardnumber4, String failmessage, Date failtime,String failure_code) {
+			String telephine, String cardnumber4, String failmessage, Date failtime,String failure_code,String lang) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -48,6 +54,7 @@ public class FailInfo {
 		this.failmessage = failmessage;
 		this.failtime = failtime;
 		this.failure_code=failure_code;
+		this.lang = lang;
 	}
 
 	public Integer getId() {
@@ -153,6 +160,30 @@ public class FailInfo {
 
 	public void setFailnum(Integer failnum) {
 		this.failnum = failnum;
+	}
+
+	public String getIsread() {
+		return isread;
+	}
+
+	public void setIsread(String isread) {
+		this.isread = isread;
+	}
+
+	public String getLang() {
+		return lang;
+	}
+
+	public void setLang(String lang) {
+		this.lang = lang;
+	}
+
+	public String getIshandle() {
+		return ishandle;
+	}
+
+	public void setIshandle(String ishandle) {
+		this.ishandle = ishandle;
 	}
 	
 	

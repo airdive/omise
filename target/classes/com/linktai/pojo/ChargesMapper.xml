@@ -22,6 +22,7 @@
 		<result column="telephone" jdbcType="VARCHAR" property="telephone" />
 		<result column="note" jdbcType="VARCHAR" property="note" />
 		<result column="lang" jdbcType="VARCHAR" property="lang" />
+		<result column="signTime" jdbcType="TIMESTAMP" property="signTime" />
 	</resultMap>
 	<insert id="insert" useGeneratedKeys="true" keyProperty="chargesId"
 		parameterType="com.linktai.pojo.Charges">
@@ -195,7 +196,8 @@
 		email,
 		telephone,
 		note,
-		lang
+		lang,
+		signTime
 		FROM
 		edcon_charges WHERE  isdelete=0 AND charges_state!=0
 		<if test="select!=null">
