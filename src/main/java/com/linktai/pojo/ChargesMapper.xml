@@ -207,4 +207,14 @@
 		</if>
 		LIMIT #{start},#{ps};
 	</select>
+	<update id="updateSign" parameterType="java.lang.Integer">
+		UPDATE edcon_charges SET charges_state=1 WHERE charges_id=#{chargesId};
+	</update>
+	<update id="findBySign" parameterType="java.lang.String">
+		UPDATE edcon_charges SET charges_state=1 WHERE sign=#{_parameter};
+	</update>
+	
+	<select id="selectBySign" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT count(charges_id) FROM edcon_charges WHERE sign=#{_parameter};
+	</select>
 </mapper>

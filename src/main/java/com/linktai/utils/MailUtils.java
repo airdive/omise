@@ -92,7 +92,8 @@ public class MailUtils {
 			
 			//����
 			MimeBodyPart text = new MimeBodyPart();
-			text.setText(lang.equals("en")?ContentEn:ContentCn);
+//			text.setText(lang.equals("en")?ContentEn:ContentCn);
+			text.setContent(lang.equals("en")?ContentEn:ContentCn, "text/html; charset=utf-8");
 			//����
 			MimeBodyPart attachment = new MimeBodyPart();
 			DataHandler dh2 = new DataHandler(new FileDataSource((mail.getFiles()))); // ��ȡ�����ļ�

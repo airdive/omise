@@ -31,10 +31,18 @@
 <!-- 			enableCountByExample="false" enableUpdateByExample="false" -->
 <!-- 			enableDeleteByExample="false" enableSelectByExample="false" -->
 <!-- 			selectByExampleQueryId="false"></table> -->
-		<table tableName="mail" domainObjectName="MailInfo"
+<!-- 		<table tableName="mail" domainObjectName="MailInfo" -->
+<!-- 			enableCountByExample="false" enableUpdateByExample="false" -->
+<!-- 			enableDeleteByExample="false" enableSelectByExample="false" -->
+<!-- 			selectByExampleQueryId="false"></table> -->
+		<table tableName="webcontent" domainObjectName="WebContent"
 			enableCountByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" enableSelectByExample="false"
 			selectByExampleQueryId="false"></table>
+<!-- 		<table tableName="journey" domainObjectName="Journey" -->
+<!-- 			enableCountByExample="false" enableUpdateByExample="false" -->
+<!-- 			enableDeleteByExample="false" enableSelectByExample="false" -->
+<!-- 			selectByExampleQueryId="false"></table> -->
 <!-- 		<table tableName="edcon_ticket" domainObjectName="Ticket" -->
 <!-- 			enableCountByExample="false" enableUpdateByExample="false" -->
 <!-- 			enableDeleteByExample="false" enableSelectByExample="false" -->

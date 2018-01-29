@@ -131,34 +131,13 @@ public class ManagerServerimpl implements ManagerService {
 
 	public Map<String, String> verifySign(String sign) {
 		HashMap<String, String> hashMap = new HashMap<String, String>();
-		boolean contains = sign.contains(",");
-		// 前期签名没有加编号
-		if (!contains) {
+		Integer findBySign = chargesMapper.findBySign(sign);
+		if(findBySign>0) {
 			hashMap.put("state", "0");
 			return hashMap;
 		}
-		int indexOf = sign.indexOf(',');
-		String chargesId = sign.substring(0, indexOf);
-		String s = sign.substring(indexOf + 1, sign.length());
-		Integer valueOf = null;
-		try {
-			valueOf = Integer.valueOf(chargesId);
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-			hashMap.put("state", "1");
-			return hashMap;
-		}
-		HashMap<String,Integer> map = new HashMap<String, Integer>();
-		map.put("chargesId", valueOf);
-		Charges charges = chargesMapper.findChargesByChargesId(map);
-		String numberOmise = charges.getChargesNumberOmise();
-		String encript = RsaUtils.encript(numberOmise, RsaUtils.public_key);
-		boolean verify = RsaUtils.verify(encript, s, RsaUtils.public_key);
-		if(verify) {
-			hashMap.put("state", "0");
-		}else {
-			hashMap.put("state", "1");
-		}
+		hashMap.put("state", "1");
+		
 		return hashMap;
 	}
 

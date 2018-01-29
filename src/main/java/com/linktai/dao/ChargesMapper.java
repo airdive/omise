@@ -27,4 +27,11 @@ public interface ChargesMapper {
     List<Charges> findByZP(Map<String, Object> map);
     
     List<Charges> findByQD(Map<String, Object> map);
+    
+    
+    Integer updateSign(Integer chargesId);
+    
+    Integer findBySign(String sign);
+    
+    Integer selectBySign(String sign);
 }

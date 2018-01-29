@@ -162,6 +162,14 @@ public class ManagerController {
 	@RequestMapping("pageSpiltQD")
 	@ResponseBody
 	public PageUtil<Charges> pageSpiltQD(PageUtil<Charges> page, @RequestParam(required = false) String select) {
+		if(select!=null) {
+			try {
+				select = new String(select.getBytes("ISO-8859-1"), "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		PageUtil<Charges> pageUtil = managerService.pageListQD(page.getCp(), page.getPs(), select);
 		return pageUtil;
 	}
@@ -175,8 +183,7 @@ public class ManagerController {
 		Map<String, Integer> accountQD = managerService.accountQD();
 		return accountQD;
 	}
-	
-	
+
 	/**
 	 * 获取邮件内容
 	 */
@@ -199,8 +206,18 @@ public class ManagerController {
 	@RequestMapping("updateMailContent")
 	@ResponseBody
 	public Map<String, String> updateMailContent(MailInfo mailInfo) {
-		Map<String, String> map = managerService.updateMailContent(mailInfo);
-		return map;
+		Object json = JSON.toJSON(mailInfo);
+		try {
+			String str = new String(json.toString().getBytes("ISO-8859-1"), "UTF-8");
+			System.out.println(str);
+			MailInfo mailInfo2 = JSON.parseObject(str, new TypeReference<MailInfo>() {
+			});
+			Map<String, String> map = managerService.updateMailContent(mailInfo2);
+			return map;
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
@@ -212,42 +229,33 @@ public class ManagerController {
 		Map<String, Integer> notRead = managerService.countNotRead();
 		return notRead;
 	}
-	
-	
+
 	/**
-	 * 签到
+	 * 签到,jiaqianming
 	 */
-	public Map<String, String> verifySign(String sign){
-		HashMap<String,String> hashMap = new HashMap<String, String>();
-		int indexOf = sign.indexOf(',');
-		if(indexOf==-1) {
-			hashMap.put("state", "0");
-			return hashMap;
-		}
-		String chargesid = sign.substring(0, indexOf);
-		Integer valueOf = Integer.valueOf(chargesid);
-		sign = sign.substring(indexOf,sign.length());
-		
-		
-		return null;
+	@RequestMapping("verifySign")
+	@ResponseBody
+	public Map<String, String> verifySign(String sign) {
+		Map<String, String> verifySign = managerService.verifySign(sign);
+		return verifySign;
 	}
-	
-	
-	
+
 	/**
 	 * 将错误信息的用户 加入交易表
-	 * @param id    失败信息id
+	 * 
+	 * @param id
+	 *            失败信息id
 	 * @return
 	 */
 	@RequestMapping("addFailInfoToCharges")
 	@ResponseBody
-	public Map<String, String> addFailInfoToCharges(Integer id,String name,String email){
+	public Map<String, String> addFailInfoToCharges(Integer id, String name, String email) {
 		try {
 			name = new String(name.getBytes("ISO-8859-1"), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		Map<String, String> map = managerService.addFailInfoToCharges(id,name,email);
+		Map<String, String> map = managerService.addFailInfoToCharges(id, name, email);
 		return map;
 	}
 

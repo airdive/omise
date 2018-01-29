@@ -21,8 +21,8 @@
 		<property name="url"
 			value="jdbc:mysql://localhost:3306/meetup?serverTimezone=Hongkong"></property>
 		<property name="username" value="root"></property>
-		<property name="password" value="P5zaiJOvUcc3bLyS"></property>
-<!-- 		<property name="password" value="root"></property> -->
+<!-- 		<property name="password" value="P5zaiJOvUcc3bLyS"></property> -->
+		<property name="password" value="root"></property>
 	</bean>
 	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"></property>
@@ -50,40 +50,40 @@
 		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
 		<property name="hostName" value="localhost"></property>
 		<property name="port" value="6379"></property>
-		<property name="password" value="123"></property>
-<!-- 		<property name="password" value=""></property> -->
+<!-- 		<property name="password" value="123"></property> -->
+		<property name="password" value=""></property>
 
 	</bean>
 
 	<bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
 		<property name="connectionFactory" ref="JedisConnectionFactory" />
 	</bean>
-	<mvc:interceptors>
-		<mvc:interceptor>
-			<mvc:mapping path="/charges/pageSpilt" />
-			<mvc:mapping path="/charges/updateInfo" />
-			<mvc:mapping path="/charges/giveTicket" />
-			<mvc:mapping path="/charges/sendMailZP" />
-			<mvc:mapping path="/charges/pageSpiltZP" />
-			<mvc:mapping path="/failInfo/**" />
-			<mvc:mapping path="/manager/updateInfo" />
-			<mvc:mapping path="/manager/giveTicket" />
-			<mvc:mapping path="/manager/logout" />
-			<mvc:mapping path="/manager/updatePWD" />
-			<mvc:mapping path="/manager/pageSpiltQD" />
-			<mvc:mapping path="/manager/accountQD" />
-			<mvc:mapping path="/manager/findMailInfo" />
-			<mvc:mapping path="/manager/updateMailContent" />
-			<mvc:mapping path="/manager/addFailInfoToCharges" />
+<!-- 	<mvc:interceptors> -->
+<!-- 		<mvc:interceptor> -->
+<!-- 			<mvc:mapping path="/charges/pageSpilt" /> -->
+<!-- 			<mvc:mapping path="/charges/updateInfo" /> -->
+<!-- 			<mvc:mapping path="/charges/giveTicket" /> -->
+<!-- 			<mvc:mapping path="/charges/sendMailZP" /> -->
+<!-- 			<mvc:mapping path="/charges/pageSpiltZP" /> -->
+<!-- 			<mvc:mapping path="/failInfo/**" /> -->
+<!-- 			<mvc:mapping path="/manager/updateInfo" /> -->
+<!-- 			<mvc:mapping path="/manager/giveTicket" /> -->
+<!-- 			<mvc:mapping path="/manager/logout" /> -->
+<!-- 			<mvc:mapping path="/manager/updatePWD" /> -->
+<!-- 			<mvc:mapping path="/manager/pageSpiltQD" /> -->
+<!-- 			<mvc:mapping path="/manager/accountQD" /> -->
+<!-- 			<mvc:mapping path="/manager/findMailInfo" /> -->
+<!-- 			<mvc:mapping path="/manager/updateMailContent" /> -->
+<!-- 			<mvc:mapping path="/manager/addFailInfoToCharges" /> -->
 			
-			<bean class="com.linktai.utils.LoginIntercepter"></bean>
-		</mvc:interceptor>
-	</mvc:interceptors>
+<!-- 			<bean class="com.linktai.utils.LoginIntercepter"></bean> -->
+<!-- 		</mvc:interceptor> -->
+<!-- 	</mvc:interceptors> -->
 	
 	
 <!-- 	allowed-origins="https://baoming.in" -->
 	<mvc:cors>
-		<mvc:mapping path="/**" allowed-origins="https://baoming.in"
+		<mvc:mapping path="/**" allowed-origins="*"
 			allow-credentials="true" max-age="3600" allowed-methods="GET,POST,OPTIONS"
 			allowed-headers="Origin, X-Requested-With, Content-Type, Accept" />
 	</mvc:cors>
