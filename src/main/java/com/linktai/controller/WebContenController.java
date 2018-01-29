@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
-import com.linktai.pojo.Charges;
 import com.linktai.pojo.WebContent;
 import com.linktai.service.WebContentService;
 

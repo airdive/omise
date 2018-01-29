@@ -35,7 +35,7 @@
 		<if test="failCode!=null">
 			WHERE failure_code=#{failCode}
 		</if>
-		 GROUP BY name,failure_code ORDER BY id
+		 GROUP BY name,failure_code ORDER BY failtime DESC
 		 LIMIT #{start},#{ps};
 	</select>
 

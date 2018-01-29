@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
@@ -24,7 +23,6 @@ import com.linktai.pojo.Managers;
 import com.linktai.service.IChargesService;
 import com.linktai.service.ManagerService;
 import com.linktai.utils.PageUtil;
-import com.linktai.utils.rsa.RsaUtils;
 
 @Controller
 @RequestMapping("manager")
