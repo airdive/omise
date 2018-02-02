@@ -36,6 +36,10 @@ public class FailInfo {
     
     private String ishandle;
     
+    private String isPayCoin;
+    
+    private String txhash;
+    
     public FailInfo() {
 		// TODO Auto-generated constructor stub
 	}
@@ -184,6 +188,22 @@ public class FailInfo {
 
 	public void setIshandle(String ishandle) {
 		this.ishandle = ishandle;
+	}
+
+	public String getIsPayCoin() {
+		return isPayCoin;
+	}
+
+	public void setIsPayCoin(String isPayCoin) {
+		this.isPayCoin = isPayCoin;
+	}
+
+	public String getTxhash() {
+		return txhash;
+	}
+
+	public void setTxhash(String txhash) {
+		this.txhash = txhash;
 	}
 	
 	

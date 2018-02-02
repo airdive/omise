@@ -28,5 +28,7 @@ public interface IChargesService {
 	
 	public Map<String, String> sendMailZP(Integer chargesId,String lang);
 	public Map<String, Integer> findAllCount();
+	
+	public Map<String, String> chargesByETH(String arg,String txhash);
 
 }

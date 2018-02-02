@@ -34,4 +34,8 @@ public interface ChargesMapper {
     Integer findBySign(String sign);
     
     Integer selectBySign(String sign);
+    
+    List<Charges> findAllCharges();
+    
+    Charges selectChargesBySign(String sign);
 }

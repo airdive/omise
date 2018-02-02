@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -48,6 +50,19 @@ public class ChargesServiceimpl implements IChargesService {
 	private FailInfoMapper failInfoMapper;
 	@Autowired
 	private MailInfoMapper mailInfoMapper;
+	private static ExecutorService pool;
+	
+	public static ExecutorService getExcutors() {
+		if(pool==null) {
+			synchronized (ChargesServiceimpl.class) {
+				if(pool==null) {
+					pool = Executors.newFixedThreadPool(20);
+					return pool;
+				}
+			}
+		}
+		return pool;
+	}
 
 	public PageUtil<Charges> listPage(Integer cp, Integer ps, String select) {
 		HashMap<String, Object> hashMap = new HashMap<String, Object>();
@@ -58,7 +73,6 @@ public class ChargesServiceimpl implements IChargesService {
 		}
 		hashMap.put("select", select);
 		Integer allCount = chargesMapper.findAllCount(hashMap);
-		System.out.println("allcount"+allCount);
 		Integer allPage = (allCount + ps - 1) / ps;
 		Integer start = cp * ps;
 		hashMap.put("start", start);
@@ -66,6 +80,29 @@ public class ChargesServiceimpl implements IChargesService {
 		List<Charges> page = chargesMapper.findByPage(hashMap);
 		PageUtil<Charges> pageUtil = new PageUtil<Charges>(page, cp, ps, allPage);
 		return pageUtil;
+	}
+	
+	
+	public Map<String, String> chargesByETH(String arg,String txhash){
+		HashMap<String, String> hashMap = new HashMap<String, String>();
+		if (arg == null || txhash == null) {
+			hashMap.put("state", "1");
+			return hashMap;
+		}
+		String chargesJson = (String) redisTemplate.opsForHash().get("account", arg);
+		JSON parse = (JSON) JSON.parse(chargesJson);
+		Charges charges = JSON.toJavaObject(parse, Charges.class);
+		HashMap<String,String> map = new HashMap<String, String>();
+		map.put("txhash", txhash);
+		map.put("name", charges.getName());
+		map.put("email", charges.getEmail());
+		Integer payCoin = failInfoMapper.updateTxHashAndIsPayCoin(map);
+		if(payCoin>0) {
+			hashMap.put("state", "0");
+			return hashMap;
+		}
+		hashMap.put("state", "1");
+		return hashMap;
 	}
 
 	public Map<String, String> charges(String arg, String tokenId) {
@@ -82,7 +119,7 @@ public class ChargesServiceimpl implements IChargesService {
 		/**
 		 * 清除数据，避免表单重复提交
 		 */
-		redisTemplate.opsForHash().delete("account", arg);
+		//redisTemplate.opsForHash().delete("account", arg);
 		if (charges == null) {
 			// 过期
 			hashMap.put("state", "3");
@@ -92,10 +129,12 @@ public class ChargesServiceimpl implements IChargesService {
 		Charge charge = null;
 		try {
 			Client client = new Client(PUBLIC_KEY, PRIVATE_KEY);
-//			Create card = new Token.Create().card(new Card.Create().name(card1.getNameOnCard())
-//					.number(card1.getCardNumber()).expiration(card1.getExpiryMonth(), card1.getExpiryYear())
-//					.securityCode(card1.getSecurityCode()));
-//			Token token = client.tokens().create(card);
+			// Create card = new Token.Create().card(new
+			// Card.Create().name(card1.getNameOnCard())
+			// .number(card1.getCardNumber()).expiration(card1.getExpiryMonth(),
+			// card1.getExpiryYear())
+			// .securityCode(card1.getSecurityCode()));
+			// Token token = client.tokens().create(card);
 
 			charge = client.charges().create(new Charge.Create().amount(3500).currency("usd").card(tokenId));
 			if (!charge.getStatus().toString().equals("Successful")) {
@@ -103,16 +142,16 @@ public class ChargesServiceimpl implements IChargesService {
 				hashMap.put("state", "1");
 				hashMap.put("failureMessage", charge.getFailureMessage() == null ? null : charge.getFailureMessage());
 				FailInfo failInfo = new FailInfo(null, charges.getName(), charges.getCountry(), charges.getCompany(),
-						charges.getPosition(), charges.getEmail(), charges.getTelephone(),
-						null,
-						charge.getFailureMessage(), new Date(), charge.getFailureCode(),charges.getLang());
+						charges.getPosition(), charges.getEmail(), charges.getTelephone(), null,
+						charge.getFailureMessage(), new Date(), charge.getFailureCode(), charges.getLang());
 				int insert = failInfoMapper.insert(failInfo);
 				return hashMap;
 			}
 
 			MyThread myThread = new MyThread(charges, null, charge);
-			myThread.start();
-
+			ExecutorService excutors = ChargesServiceimpl.getExcutors();
+			excutors.execute(myThread);
+			
 			hashMap.put("state", "0");
 			hashMap.put("lang", charges.getLang());
 			return hashMap;
@@ -124,9 +163,8 @@ public class ChargesServiceimpl implements IChargesService {
 			e.printStackTrace();
 		}
 		FailInfo failInfo = new FailInfo(null, charges.getName(), charges.getCountry(), charges.getCompany(),
-				charges.getPosition(), charges.getEmail(), charges.getTelephone(),
-				null,
-				"失效信息，名称无效，号码无效或不支持品牌", new Date(), charge == null ? "失效信息，名称无效，号码无效或不支持品牌" : charge.getFailureCode(),charges.getLang());
+				charges.getPosition(), charges.getEmail(), charges.getTelephone(), null, "失效信息，名称无效，号码无效或不支持品牌",
+				new Date(), charge == null ? "失效信息，名称无效，号码无效或不支持品牌" : charge.getFailureCode(), charges.getLang());
 		int insert = failInfoMapper.insert(failInfo);
 		// 输入信息错误
 		hashMap.put("state", "1");
@@ -187,14 +225,19 @@ public class ChargesServiceimpl implements IChargesService {
 			charges.setChargesTime(new Date());
 			charges.setChargesState(0);
 			charges.setIssendmail(0);
-			charges.setChargesNumberOmise(charge.getId());
+			if(charge==null) {
+				String substring = UUID.randomUUID().toString().replaceAll("-", "");
+				charges.setChargesNumberOmise("linkTime_" + substring);
+			}else {
+				charges.setChargesNumberOmise(charge.getId());
+			}
 			charges.setIsused(0);
 			charges.setCardnumber(null);
 			int insert = chargesMapper.insert(charges);
 
 			// 创建签名
 			String sign = RsaUtils.createSign(charges.getChargesNumberOmise());
-			sign = charges.getChargesId()+","+sign;
+			sign = charges.getChargesId() + "," + sign;
 
 			try {
 				// 创建二维码
@@ -208,13 +251,13 @@ public class ChargesServiceimpl implements IChargesService {
 				MailUtils mailUtils = new MailUtils();
 				MailInfo payMail = mailInfoMapper.selectMail("pay");
 				MailInfo payMailCN = mailInfoMapper.selectMail("payCN");
-				
+
 				mailUtils.setSubjectEn(payMail.getSubject());
 				mailUtils.setContentEn(payMail.getContent());
 				mailUtils.setSubjectCn(payMailCN.getSubject());
 				mailUtils.setContentCn(payMailCN.getContent());
 				boolean sendMessage = mailUtils.sendMessage(mail, charges.getName(), charges.getLang());
-				if(!sendMessage) {
+				if (!sendMessage) {
 					return;
 				}
 				// 设置图片路径存入数据库
@@ -277,13 +320,13 @@ public class ChargesServiceimpl implements IChargesService {
 				MailUtils mailUtils = new MailUtils();
 				MailInfo payMail = mailInfoMapper.selectMail("pay");
 				MailInfo payMailCN = mailInfoMapper.selectMail("payCN");
-				
+
 				mailUtils.setSubjectEn(payMail.getSubject());
 				mailUtils.setContentEn(payMail.getContent());
 				mailUtils.setSubjectCn(payMailCN.getSubject());
 				mailUtils.setContentCn(payMailCN.getContent());
 				boolean sendMessage = mailUtils.sendMessage(mail, charges.getName(), charges.getLang());
-				if(!sendMessage) {
+				if (!sendMessage) {
 					return;
 				}
 				// 设置图片路径存入数据库
@@ -310,7 +353,7 @@ public class ChargesServiceimpl implements IChargesService {
 		Ticket ticket = ticketMapper.findTicket();
 
 		charges.setTicketId(ticket.getId());
-		charges.setChargesRental(charges.getChargesRental()==null?0:charges.getChargesRental());
+		charges.setChargesRental(charges.getChargesRental() == null ? 0 : charges.getChargesRental());
 		charges.setChargesTime(new Date());
 		charges.setChargesState(0);
 		charges.setIssendmail(0);
@@ -374,9 +417,9 @@ public class ChargesServiceimpl implements IChargesService {
 	 * 发送邮件功能
 	 */
 	public Map<String, String> sendMail(Integer chargesId) {
-		HashMap<String,String> map = new HashMap<String, String>();
-		
-		HashMap<String,Integer> hashMap = new HashMap<String, Integer>();
+		HashMap<String, String> map = new HashMap<String, String>();
+
+		HashMap<String, Integer> hashMap = new HashMap<String, Integer>();
 		hashMap.put("chargesId", chargesId);
 		Charges charges = chargesMapper.findChargesByChargesId(hashMap);
 		// 创建签名
@@ -393,7 +436,7 @@ public class ChargesServiceimpl implements IChargesService {
 			MailUtils mailUtils = new MailUtils();
 			MailInfo payMail = mailInfoMapper.selectMail("pay");
 			MailInfo payMailCN = mailInfoMapper.selectMail("payCN");
-			
+
 			mailUtils.setSubjectEn(payMail.getSubject());
 			mailUtils.setContentEn(payMail.getContent());
 			mailUtils.setSubjectCn(payMailCN.getSubject());
@@ -416,20 +459,20 @@ public class ChargesServiceimpl implements IChargesService {
 		return map;
 	}
 
-	public Map<String, String> sendMailZP(Integer chargesId,String lang) {
+	public Map<String, String> sendMailZP(Integer chargesId, String lang) {
 		HashMap<String, String> map = new HashMap<String, String>();
-		if(lang==null) {
+		if (lang == null) {
 			map.put("state", "1");
 			return map;
 		}
-		
-		HashMap<String,Integer> hashMap = new HashMap<String, Integer>();
+
+		HashMap<String, Integer> hashMap = new HashMap<String, Integer>();
 		hashMap.put("chargesId", chargesId);
 		Charges charges = chargesMapper.findChargesByChargesId(hashMap);
 		// 创建签名
 		String sign = RsaUtils.createSign(charges.getChargesNumberOmise());
-		//加了编号
-		sign = chargesId+","+sign;
+		// 加了编号
+		sign = chargesId + "," + sign;
 
 		try {
 			// 创建二维码
@@ -437,9 +480,9 @@ public class ChargesServiceimpl implements IChargesService {
 			// 创建门票
 			String file = Graphies.creatFile(path, lang, "" + charges.getChargesId(), charges.getName());
 			Mail mail = new Mail(charges.getEmail(), null, null, new Date(), new File(file));
-			//发交易邮件
-			if(charges.getChargesRental()!=null && charges.getChargesRental()>0) {
-				System.out.println("交易额"+charges.getChargesRental());
+			// 发交易邮件
+			if (charges.getChargesRental() != null && charges.getChargesRental() > 0) {
+				System.out.println("交易额" + charges.getChargesRental());
 				MailUtils mailUtils = new MailUtils();
 				MailInfo payMail = mailInfoMapper.selectMail("pay");
 				MailInfo payMailCN = mailInfoMapper.selectMail("payCN");
@@ -448,7 +491,7 @@ public class ChargesServiceimpl implements IChargesService {
 				mailUtils.setSubjectCn(payMailCN.getSubject());
 				mailUtils.setContentCn(payMailCN.getContent());
 				boolean sendMessage = mailUtils.sendMessage(mail, charges.getName(), lang);
-				if(!sendMessage) {
+				if (!sendMessage) {
 					map.put("state", "1");
 					return map;
 				}
@@ -460,8 +503,8 @@ public class ChargesServiceimpl implements IChargesService {
 				int updateCharges = chargesMapper.updatePathAndSign(charges);
 				map.put("state", "0");
 				return map;
-				//发送赠票邮件
-			}else {
+				// 发送赠票邮件
+			} else {
 				// 发送邮件
 				MailUtils mailUtils = new MailUtils();
 				MailInfo payMail = mailInfoMapper.selectMail("send");
@@ -471,7 +514,7 @@ public class ChargesServiceimpl implements IChargesService {
 				mailUtils.setSubjectCn(payMailCN.getSubject());
 				mailUtils.setContentCn(payMailCN.getContent());
 				boolean sendMessage = mailUtils.sendMessage(mail, charges.getName(), lang);
-				if(!sendMessage) {
+				if (!sendMessage) {
 					map.put("state", "1");
 					return map;
 				}
@@ -484,7 +527,7 @@ public class ChargesServiceimpl implements IChargesService {
 				map.put("state", "0");
 				return map;
 			}
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (WriterException e) {
@@ -493,19 +536,21 @@ public class ChargesServiceimpl implements IChargesService {
 		map.put("state", "1");
 		return map;
 	}
-	
-	
-	public Map<String, Integer> findAllCount(){
-		HashMap<String,Object> hashMap = new HashMap<String, Object>();
+
+	public Map<String, Integer> findAllCount() {
+		HashMap<String, Object> hashMap = new HashMap<String, Object>();
 		hashMap.put("select", null);
 		Integer allCount = chargesMapper.findAllCountZP(hashMap);
 		Integer allCount2 = chargesMapper.findAllCount(hashMap);
-		Integer all = allCount+allCount2;
-		HashMap<String,Integer> map = new HashMap<String, Integer>();
+		Integer all = allCount + allCount2;
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		map.put("pp", allCount2);
 		map.put("zp", allCount);
 		map.put("all", all);
 		return map;
 	}
+	
+	
+	
 
 }

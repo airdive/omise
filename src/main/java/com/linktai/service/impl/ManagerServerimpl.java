@@ -1,23 +1,32 @@
 package com.linktai.service.impl;
 
+import java.io.File;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSON;
 import com.linktai.dao.ChargesMapper;
 import com.linktai.dao.FailInfoMapper;
 import com.linktai.dao.MailInfoMapper;
 import com.linktai.dao.ManagersMapper;
 import com.linktai.pojo.Charges;
 import com.linktai.pojo.FailInfo;
+import com.linktai.pojo.Mail;
 import com.linktai.pojo.MailInfo;
 import com.linktai.pojo.Managers;
 import com.linktai.service.IChargesService;
 import com.linktai.service.ManagerService;
+import com.linktai.service.impl.ManagerServerimpl.SendAll;
+import com.linktai.utils.Graphies;
+import com.linktai.utils.MailUtils;
 import com.linktai.utils.PageUtil;
 import com.linktai.utils.rsa.RsaUtils;
 
@@ -108,6 +117,8 @@ public class ManagerServerimpl implements ManagerService {
 		Charges charges = new Charges(failInfo.getName(), failInfo.getCountry(), failInfo.getCompany(),
 				failInfo.getPosition(), failInfo.getEmail(), failInfo.getTelephine(), failInfo.getLang());
 		charges.setChargesRental(3500);
+		charges.setIsPayCoin(failInfo.getIsPayCoin());
+		charges.setTxhash(failInfo.getTxhash());
 		Map<String, Integer> map = chargesService.charges(charges);
 		HashMap<String, String> hashMap = new HashMap<String, String>();
 		if (map != null && map.get("chargesid") > 0) {
@@ -129,23 +140,77 @@ public class ManagerServerimpl implements ManagerService {
 		return hashMap;
 	}
 
-	public Map<String, String> verifySign(String sign) {
-		HashMap<String, String> hashMap = new HashMap<String, String>();
+	public Map<String, Object> verifySign(String sign) {
+		HashMap<String, Object> hashMap = new HashMap<String, Object>();
 		Integer findBySign = chargesMapper.findBySign(sign);
-		if(findBySign>0) {
+		if (findBySign > 0) {
+			Charges data = chargesMapper.selectChargesBySign(sign);
 			hashMap.put("state", "0");
+			HashMap<String,String> map = new HashMap<String, String>();
+			map.put("ticket_no", ""+data.getChargesId());
+			map.put("name", data.getName());
+			hashMap.put("status", "0");
+			hashMap.put("data", map);
 			return hashMap;
 		}
 		hashMap.put("state", "1");
-		
+		hashMap.put("status", "1");
+
 		return hashMap;
 	}
-
-	
 
 	public MailInfo findMailInfo(String name) {
 		MailInfo mail = mailInfoMapper.selectMail(name);
 		return mail;
 	}
+
+	public Map<String, String> sendAllAgain() {
+		ExecutorService pool = Executors.newFixedThreadPool(10);
+		HashMap<String, String> hashMap = new HashMap<String, String>();
+		List<Charges> allCharges = chargesMapper.findAllCharges();
+		Integer acount = 0;
+		for (Charges charges : allCharges) {
+			SendAll sendAll = new SendAll();
+			sendAll.setCharges(charges);
+			pool.execute(sendAll);
+			acount += 1;
+		}
+		hashMap.put("account", "" + acount);
+		return hashMap;
+
+	}
+
+	class SendAll implements Runnable {
+		private Charges charges;
+
+		public Charges getCharges() {
+			return charges;
+		}
+
+		public void setCharges(Charges charges) {
+			this.charges = charges;
+		}
+
+		public void run() {
+			// 创建门票
+			String file = Graphies.creatFile(charges.getZxingcodepath(), charges.getLang(), "" + charges.getChargesId(),
+					charges.getName());
+			Mail mail = new Mail(charges.getEmail(), null, null, new Date(), new File(file));
+
+			// 发送邮件
+			MailUtils mailUtils = new MailUtils();
+			MailInfo payMail = mailInfoMapper.selectMail("pay");
+			MailInfo payMailCN = mailInfoMapper.selectMail("payCN");
+
+			mailUtils.setSubjectEn(payMail.getSubject());
+			mailUtils.setContentEn(payMail.getContent());
+			mailUtils.setSubjectCn(payMailCN.getSubject());
+			mailUtils.setContentCn(payMailCN.getContent());
+			boolean sendMessage = mailUtils.sendMessage(mail, charges.getName(), charges.getLang());
+		}
+
+	}
+
+	
 
 }

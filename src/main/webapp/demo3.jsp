@@ -7,9 +7,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-<form action="https://api.baoming.in/omise/charges/pageSpilt" method="post">
-	<input type="text" name="cp">
-	<input type="text" name="ps">
+<form action="http://localhost:8080/omise/manager/verifySign" method="post">
+	<input type="text" name="sign">
 	<input type="submit" value="分页">
 </form>
 </body>

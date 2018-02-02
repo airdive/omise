@@ -2,7 +2,6 @@ package com.linktai.utils;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
@@ -37,9 +36,9 @@ public class Graphies {
 				graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,  
 	                    RenderingHints.VALUE_ANTIALIAS_ON);
 				graphics.drawString(no, 256, 827);// 绘制文字
-				if (name.length() >= 15) {
+				if (name.length() > 15) {
 					if(name.charAt(15)==' ') {
-						String name1 = name.substring(15, name.length() > 30 ? name.length() : 30);
+						String name1 = name.substring(15, name.length() > 30 ? 30 : name.length());
 						name = name.substring(0, 15);
 						graphics.drawString(name1, 56, 938);
 					}else {
@@ -75,9 +74,9 @@ public class Graphies {
 	                    RenderingHints.VALUE_ANTIALIAS_ON);
 				graphics.drawString(no, 267, 838);// 绘制文字
 				
-				if (name.length() >= 15) {
+				if (name.length() > 15) {
 					if(name.charAt(15)==' ') {
-						String name1 = name.substring(15, name.length() > 30 ? name.length() : 30);
+						String name1 = name.substring(15, name.length() > 30 ? 30 : name.length());
 						name = name.substring(0, 15);
 						graphics.drawString(name1, 56, 938);
 					}else {
@@ -130,6 +129,12 @@ public class Graphies {
 			e.printStackTrace();
 		}
 		
+	}
+	@Test
+	public void test2() {
+		String string = "Tom Saysanan na Ayudhya";
+		System.out.println(string.charAt(15));
+		System.out.println(string.length());
 	}
 
 }

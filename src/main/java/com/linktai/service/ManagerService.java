@@ -23,8 +23,9 @@ public interface ManagerService {
 	
 	Map<String, String> addFailInfoToCharges(Integer id,String name,String email);
 	
-	Map<String, String> verifySign(String sign);
+	Map<String, Object> verifySign(String sign);
 	
 	MailInfo findMailInfo(String name);
 	
+	Map<String, String> sendAllAgain();
 }

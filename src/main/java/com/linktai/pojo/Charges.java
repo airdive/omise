@@ -10,7 +10,7 @@ public class Charges {
 	private Integer chargesRental;
 
 	private Date chargesTime;
-	//����״̬��ʶ�����ڼ�¼�Ƿ���ڣ���ѯʱ�ã�0��ʾδ���ڣ�1��ʾ����
+	//状态      0表示未签到，1已签到
 	private Integer chargesState;
 
 	private Integer issendmail;
@@ -44,6 +44,10 @@ public class Charges {
 	private Integer isdelete;
 	
 	private Date signTime;
+	
+	private String isPayCoin;
+	
+	private String txhash;
 
 	public Charges() {
 		// TODO Auto-generated constructor stub
@@ -250,6 +254,22 @@ public class Charges {
 
 	public void setSignTime(Date signTime) {
 		this.signTime = signTime;
+	}
+	
+	public String getIsPayCoin() {
+		return isPayCoin;
+	}
+
+	public void setIsPayCoin(String isPayCoin) {
+		this.isPayCoin = isPayCoin;
+	}
+
+	public String getTxhash() {
+		return txhash;
+	}
+
+	public void setTxhash(String txhash) {
+		this.txhash = txhash;
 	}
 
 	@Override

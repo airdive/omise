@@ -167,7 +167,6 @@ public class RsaUtils {
 
 	public static String createSign(String date) {
 		if (date != null) {
-			Map<String, Key> keys = getKeys();
 			String encript = encript(date, public_key);
 			String sign = sign(encript, private_key);
 			return sign;

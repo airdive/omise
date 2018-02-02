@@ -18,4 +18,6 @@ public interface FailInfoMapper {
     FailInfo findFailByID(Integer id);
     
     Integer updateStateOfHandle(HashMap<String, String> map);
+    
+    Integer updateTxHashAndIsPayCoin(HashMap<String, String> map);
 }

@@ -10,14 +10,12 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
-import com.linktai.pojo.CardOfAc;
 import com.linktai.pojo.Charges;
 import com.linktai.service.IChargesService;
 import com.linktai.utils.PageUtil;
@@ -48,11 +46,23 @@ public class ChargesController {
 		Map<String, String> map = chargesService.charges(para, tokenId);
 		return map;
 	}
+	
+	/**
+	 * 换以太币支付方式，说明之前支付失败，传入txhash更新失败信息，后台客服验证是否转账成功，成功发送邮件
+	 * @param para
+	 * @param txhash
+	 * @return
+	 */
+	@RequestMapping(value="payByETH")
+	@ResponseBody
+	public Map<String, String> chargesByETH(String para,String txhash){
+		Map<String, String> chargesByETH = chargesService.chargesByETH(para, txhash);
+		return chargesByETH;
+	}
 
 	@RequestMapping(value = "accountInfo")
 	@ResponseBody
 	public Map<String, String> charges1(Charges charges) {
-		System.out.println(charges);
 		HashMap<String, String> hashMap = new HashMap<String, String>();
 		String substring = UUID.randomUUID().toString().replaceAll("-", "");
 		hashMap.put("para", substring);

@@ -23,6 +23,8 @@
 		<result column="note" jdbcType="VARCHAR" property="note" />
 		<result column="lang" jdbcType="VARCHAR" property="lang" />
 		<result column="signTime" jdbcType="TIMESTAMP" property="signTime" />
+		<result column="txhash" jdbcType="VARCHAR" property="txhash" />
+		<result column="isPayCoin" jdbcType="VARCHAR" property="isPayCoin" />
 	</resultMap>
 	<insert id="insert" useGeneratedKeys="true" keyProperty="chargesId"
 		parameterType="com.linktai.pojo.Charges">
@@ -33,7 +35,7 @@
 		isUsed, cardNumber, name,
 		country, company,
 		position,
-		email, telephone, note,lang
+		email, telephone, note,lang,txhash,isPayCoin
 		)
 		values (#{ticketId,jdbcType=INTEGER},
 		#{chargesRental,jdbcType=INTEGER},
@@ -46,7 +48,7 @@
 		#{country,jdbcType=VARCHAR},
 		#{company,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR},
 		#{email,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR},
-		#{note,jdbcType=VARCHAR},#{lang,jdbcType=VARCHAR}
+		#{note,jdbcType=VARCHAR},#{lang,jdbcType=VARCHAR},#{txhash,jdbcType=VARCHAR},#{isPayCoin,jdbcType=VARCHAR}
 		)
 	</insert>
 	<update id="updatePathAndSign" parameterType="com.linktai.pojo.Charges">
@@ -74,7 +76,9 @@
 		email,
 		telephone,
 		note,
-		lang
+		lang,
+		txhash,
+		isPayCoin
 		FROM
 		edcon_charges WHERE  isdelete=0 AND charges_rental>0
 		<if test="select!=null">
@@ -82,6 +86,8 @@
 			against
 			(#{select} IN BOOLEAN MODE )
 		</if>
+		OR isPayCoin=1
+		ORDER BY charges_time DESC
 		LIMIT #{start},#{ps};
 	</select>
 	
@@ -106,7 +112,7 @@
 		note,
 		lang
 		FROM
-		edcon_charges WHERE  isdelete=0 AND charges_rental=0
+		edcon_charges WHERE  isdelete=0 AND charges_rental=0 AND isPayCoin=0
 		<if test="select!=null">
 			AND match(name,country,company,position,email,telephone)
 			against
@@ -216,5 +222,38 @@
 	
 	<select id="selectBySign" parameterType="java.lang.String" resultType="java.lang.Integer">
 		SELECT count(charges_id) FROM edcon_charges WHERE sign=#{_parameter};
+	</select>
+	
+	
+	<select id="findAllCharges" resultMap="BaseResultMap">
+		SELECT charges_id,
+		ticket_id,
+		charges_rental,
+		charges_time,
+		charges_state,
+		isSendmail,
+		charges_number_Omise,
+		zxingCodePath,
+		sign,
+		isUsed,
+		cardNumber,
+		name,
+		country,
+		company,
+		position,
+		email,
+		telephone,
+		note,
+		lang,
+		signTime
+		FROM
+		edcon_charges WHERE isdelete=0;
+	</select>
+	
+	<select id="selectChargesBySign" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT charges_id,
+		name
+		FROM
+		edcon_charges WHERE sign=#{_parameter};
 	</select>
 </mapper>

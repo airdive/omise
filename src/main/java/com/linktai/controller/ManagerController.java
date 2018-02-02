@@ -233,8 +233,8 @@ public class ManagerController {
 	 */
 	@RequestMapping("verifySign")
 	@ResponseBody
-	public Map<String, String> verifySign(String sign) {
-		Map<String, String> verifySign = managerService.verifySign(sign);
+	public Map<String, Object> verifySign(String sign) {
+		Map<String, Object> verifySign = managerService.verifySign(sign);
 		return verifySign;
 	}
 
@@ -255,6 +255,15 @@ public class ManagerController {
 		}
 		Map<String, String> map = managerService.addFailInfoToCharges(id, name, email);
 		return map;
+	}
+	
+	
+	
+	@RequestMapping("sendAllAgain")
+	@ResponseBody
+	public Map<String, String> sendAllAgain(){
+		Map<String, String> sendAllAgain = managerService.sendAllAgain();
+		return sendAllAgain;
 	}
 
 }

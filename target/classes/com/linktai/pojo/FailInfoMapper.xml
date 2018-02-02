@@ -15,6 +15,8 @@
 		<result column="failure_code" jdbcType="VARCHAR" property="failure_code" />
 		<result column="failnum" property="failnum"/>
 		<result column="ishandle" property="ishandle"/>
+		<result column="isPayCoin" property="isPayCoin"/>
+		<result column="txhash" property="txhash"/>
 	</resultMap>
 	<insert id="insert" parameterType="com.linktai.pojo.FailInfo">
 		insert into failInfo ( name, country,
@@ -30,7 +32,7 @@
 	<select id="findFailInfo" parameterType="java.util.Map"
 		resultMap="BaseResultMap">
 		SELECT
-		id,name,country,company,position,email,telephine,cardNumber4,failMessage,failtime,failure_code,ishandle,count(id) failnum
+		id,name,country,company,position,email,telephine,cardNumber4,failMessage,failtime,failure_code,ishandle,isPayCoin,txhash,count(id) failnum
 		FROM failInfo
 		<if test="failCode!=null">
 			WHERE failure_code=#{failCode}
@@ -54,10 +56,14 @@
 	</update>
 	
 	<select id="findFailByID" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-		SELECT id,name,country,company,position,email,telephine,lang FROM failInfo WHERE id=#{id};
+		SELECT id,name,country,company,position,email,telephine,lang,isPayCoin,txhash FROM failInfo WHERE id=#{id};
 	</select>
 	
 	<update id="updateStateOfHandle" parameterType="java.util.Map">
 		UPDATE failInfo SET ishandle=1 WHERE name=#{name} AND email=#{email};
+	</update>
+	
+	<update id="updateTxHashAndIsPayCoin" parameterType="java.util.Map">
+		UPDATE failInfo SET txhash=#{txhash},isPayCoin="1" WHERE name=#{name} AND email=#{email};
 	</update>
 </mapper>
