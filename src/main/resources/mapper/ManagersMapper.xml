@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linktai.dao.ManagersMapper">
+  <resultMap id="BaseResultMap" type="com.linktai.pojo.Managers">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="loginname" jdbcType="VARCHAR" property="loginname" />
+    <result column="loginpsw" jdbcType="VARCHAR" property="loginpsw" />
+  </resultMap>
+  <insert id="insert" parameterType="com.linktai.pojo.Managers">
+    insert into managers (id, loginname, loginpsw
+      )
+    values (#{id,jdbcType=INTEGER}, #{loginname,jdbcType=VARCHAR}, #{loginpsw,jdbcType=VARCHAR}
+      )
+  </insert>
+  <select id="login" parameterType="com.linktai.pojo.Managers" resultType="com.linktai.pojo.Managers">
+  	SELECT id,loginname,loginpsw FROM managers WHERE loginname=#{loginname} AND loginpsw=#{loginpsw};
+  </select>
+  <update id="updatePWD" parameterType="com.linktai.pojo.Managers">
+  	UPDATE managers SET loginpsw=#{loginpsw} WHERE loginname=#{loginname};
+  </update>
+</mapper>

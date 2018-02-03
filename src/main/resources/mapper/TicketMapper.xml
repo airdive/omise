@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linktai.dao.TicketMapper">
+	<resultMap id="BaseResultMap" type="com.linktai.pojo.Ticket">
+		<result column="id" jdbcType="INTEGER" property="id" />
+		<result column="time" jdbcType="TIMESTAMP" property="time" />
+		<result column="number" jdbcType="INTEGER" property="number" />
+		<result column="location" jdbcType="VARCHAR" property="location" />
+		<result column="price" jdbcType="INTEGER" property="price" />
+		<result column="image" jdbcType="VARCHAR" property="image" />
+	</resultMap>
+	<insert id="insert" parameterType="com.linktai.pojo.Ticket">
+		insert into edcon_ticket (id, time, number,
+		location, price, image,cardNumber
+		)
+		values (#{id,jdbcType=INTEGER}, #{time,jdbcType=TIMESTAMP},
+		#{number,jdbcType=INTEGER},
+		#{location,jdbcType=VARCHAR}, #{price,jdbcType=INTEGER},
+		#{image,jdbcType=VARCHAR},#{cardNumber,jdbcType=VARCHAR}
+		)
+	</insert>
+	<select id="findTicket" resultType="com.linktai.pojo.Ticket">
+		SELECT id,time,number,location,price,image
+		FROM edcon_ticket WHERE time>=current_timestamp;
+	</select>
+	
+	<update id="payTicket">
+		UPDATE edcon_ticket SET number = number -1 WHERE time>current_timestamp AND number>=1;
+	</update>
+
+</mapper>

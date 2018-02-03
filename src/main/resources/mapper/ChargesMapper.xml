@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linktai.dao.ChargesMapper">
+	<resultMap id="BaseResultMap" type="com.linktai.pojo.Charges">
+		<result column="charges_id" jdbcType="INTEGER" property="chargesId" />
+		<result column="ticket_id" jdbcType="INTEGER" property="ticketId" />
+		<result column="charges_rental" jdbcType="INTEGER" property="chargesRental" />
+		<result column="charges_time" jdbcType="TIMESTAMP" property="chargesTime" />
+		<result column="charges_state" jdbcType="INTEGER" property="chargesState" />
+		<result column="isSendmail" jdbcType="INTEGER" property="issendmail" />
+		<result column="charges_number_Omise" jdbcType="VARCHAR"
+			property="chargesNumberOmise" />
+		<result column="zxingCodePath" jdbcType="VARCHAR" property="zxingcodepath" />
+		<result column="sign" jdbcType="VARCHAR" property="sign" />
+		<result column="isUsed" jdbcType="INTEGER" property="isused" />
+		<result column="cardNumber" jdbcType="VARCHAR" property="cardnumber" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="country" jdbcType="VARCHAR" property="country" />
+		<result column="company" jdbcType="VARCHAR" property="company" />
+		<result column="position" jdbcType="VARCHAR" property="position" />
+		<result column="email" jdbcType="VARCHAR" property="email" />
+		<result column="telephone" jdbcType="VARCHAR" property="telephone" />
+		<result column="note" jdbcType="VARCHAR" property="note" />
+		<result column="lang" jdbcType="VARCHAR" property="lang" />
+		<result column="signTime" jdbcType="TIMESTAMP" property="signTime" />
+		<result column="txhash" jdbcType="VARCHAR" property="txhash" />
+		<result column="isPayCoin" jdbcType="VARCHAR" property="isPayCoin" />
+	</resultMap>
+	<insert id="insert" useGeneratedKeys="true" keyProperty="chargesId"
+		parameterType="com.linktai.pojo.Charges">
+		insert into edcon_charges ( ticket_id, charges_rental,
+		charges_time, charges_state, isSendmail,
+		charges_number_Omise,
+		zxingCodePath, sign,
+		isUsed, cardNumber, name,
+		country, company,
+		position,
+		email, telephone, note,lang,txhash,isPayCoin
+		)
+		values (#{ticketId,jdbcType=INTEGER},
+		#{chargesRental,jdbcType=INTEGER},
+		#{chargesTime,jdbcType=TIMESTAMP},
+		#{chargesState,jdbcType=INTEGER}, #{issendmail,jdbcType=INTEGER},
+		#{chargesNumberOmise,jdbcType=VARCHAR},
+		#{zxingcodepath,jdbcType=VARCHAR}, #{sign,jdbcType=VARCHAR},
+		#{isused,jdbcType=INTEGER}, #{cardnumber,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{country,jdbcType=VARCHAR},
+		#{company,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR},
+		#{email,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR},
+		#{note,jdbcType=VARCHAR},#{lang,jdbcType=VARCHAR},#{txhash,jdbcType=VARCHAR},#{isPayCoin,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="updatePathAndSign" parameterType="com.linktai.pojo.Charges">
+		UPDATE
+		edcon_charges SET zxingCodePath=#{zxingcodepath},sign=#{sign},isSendmail=#{issendmail}
+		WHERE
+		charges_number_Omise=#{chargesNumberOmise};
+	</update>
+	<select id="findByPage" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT charges_id,
+		ticket_id,
+		charges_rental,
+		charges_time,
+		charges_state,
+		isSendmail,
+		charges_number_Omise,
+		zxingCodePath,
+		sign,
+		isUsed,
+		cardNumber,
+		name,
+		country,
+		company,
+		position,
+		email,
+		telephone,
+		note,
+		lang,
+		txhash,
+		isPayCoin
+		FROM
+		edcon_charges WHERE  isdelete=0 AND charges_rental>0
+		<if test="select!=null">
+			AND match(name,country,company,position,email,telephone)
+			against
+			(#{select} IN BOOLEAN MODE )
+		</if>
+		OR isPayCoin=1
+		ORDER BY charges_time DESC
+		LIMIT #{start},#{ps};
+	</select>
+	
+	<select id="findByZP" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT charges_id,
+		ticket_id,
+		charges_rental,
+		charges_time,
+		charges_state,
+		isSendmail,
+		charges_number_Omise,
+		zxingCodePath,
+		sign,
+		isUsed,
+		cardNumber,
+		name,
+		country,
+		company,
+		position,
+		email,
+		telephone,
+		note,
+		lang
+		FROM
+		edcon_charges WHERE  isdelete=0 AND charges_rental=0 AND isPayCoin=0
+		<if test="select!=null">
+			AND match(name,country,company,position,email,telephone)
+			against
+			(#{select} IN BOOLEAN MODE )
+		</if>
+		LIMIT #{start},#{ps};
+	</select>
+
+	<select id="findAllCount" parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT count(charges_id) FROM edcon_charges WHERE isdelete=0 AND charges_rental>0
+		<if test="select!=null">
+			AND match(name,country,company,position,email,telephone)
+			against
+			(#{select} IN BOOLEAN MODE )
+		</if>
+	</select>
+	<select id="findAllCountZP" parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT count(charges_id) FROM edcon_charges WHERE isdelete=0 AND charges_rental=0
+		<if test="select!=null">
+			AND match(name,country,company,position,email,telephone)
+			against
+			(#{select} IN BOOLEAN MODE )
+		</if>
+	</select>
+	<select id="findAllCountQD" parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		SELECT count(charges_id) FROM edcon_charges WHERE isdelete=0 AND charges_state!=0
+		<if test="select!=null">
+			AND match(name,country,company,position,email,telephone)
+			against
+			(#{select} IN BOOLEAN MODE )
+		</if>
+	</select>
+	<update id="updateChargesInfo" parameterType="com.linktai.pojo.Charges">
+		UPDATE
+		edcon_charges
+		SET country = #{country}, company = #{company}, position = #{position}, email = #{email}, telephone
+		= #{telephone}
+		WHERE charges_id = #{chargesId};
+	</update>
+	
+	<select id="findChargesByChargesId" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT charges_id,
+		ticket_id,
+		charges_rental,
+		charges_time,
+		charges_state,
+		isSendmail,
+		charges_number_Omise,
+		zxingCodePath,
+		sign,
+		isUsed,
+		cardNumber,
+		name,
+		country,
+		company,
+		email,
+		telephone,
+		note,
+		lang
+		FROM
+		edcon_charges WHERE charges_id = #{chargesId};
+	</select>
+	
+	<update id="deleteAccount" parameterType="java.util.Map">
+		UPDATE edcon_charges SET isdelete=1 WHERE charges_id=#{chargesId};
+	</update>
+	
+	<select id="findByQD" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT charges_id,
+		ticket_id,
+		charges_rental,
+		charges_time,
+		charges_state,
+		isSendmail,
+		charges_number_Omise,
+		zxingCodePath,
+		sign,
+		isUsed,
+		cardNumber,
+		name,
+		country,
+		company,
+		position,
+		email,
+		telephone,
+		note,
+		lang,
+		signTime
+		FROM
+		edcon_charges WHERE  isdelete=0 AND charges_state!=0
+		<if test="select!=null">
+			AND match(name,country,company,position,email,telephone)
+			against
+			(#{select} IN BOOLEAN MODE )
+		</if>
+		LIMIT #{start},#{ps};
+	</select>
+	<update id="updateSign" parameterType="java.lang.Integer">
+		UPDATE edcon_charges SET charges_state=1 WHERE charges_id=#{chargesId};
+	</update>
+	<update id="findBySign" parameterType="java.lang.String">
+		UPDATE edcon_charges SET charges_state=1 WHERE sign=#{_parameter};
+	</update>
+	
+	<select id="selectBySign" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT count(charges_id) FROM edcon_charges WHERE sign=#{_parameter};
+	</select>
+	
+	
+	<select id="findAllCharges" resultMap="BaseResultMap">
+		SELECT charges_id,
+		ticket_id,
+		charges_rental,
+		charges_time,
+		charges_state,
+		isSendmail,
+		charges_number_Omise,
+		zxingCodePath,
+		sign,
+		isUsed,
+		cardNumber,
+		name,
+		country,
+		company,
+		position,
+		email,
+		telephone,
+		note,
+		lang,
+		signTime
+		FROM
+		edcon_charges WHERE isdelete=0;
+	</select>
+	
+	<select id="selectChargesBySign" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT charges_id,
+		name
+		FROM
+		edcon_charges WHERE sign=#{_parameter};
+	</select>
+</mapper>

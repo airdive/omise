@@ -21,7 +21,7 @@
 		<property name="url"
 			value="jdbc:mysql://localhost:3306/meetup?serverTimezone=Hongkong"></property>
 		<property name="username" value="root"></property>
-		<property name="password" value="P5zaiJOvUcc3bLyS"></property>
+		<property name="password" value="root"></property>
 <!-- 		<property name="password" value="root"></property> -->
 	</bean>
 	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
@@ -29,7 +29,7 @@
 		<property name="configLocation" value="classpath:mybatis.xml"></property>
 		<property name="mapperLocations">
 			<list>
-				<value>classpath:com/linktai/pojo/*.xml</value>
+				<value>classpath:mapper/*.xml</value>
 			</list>
 		</property>
 	</bean>

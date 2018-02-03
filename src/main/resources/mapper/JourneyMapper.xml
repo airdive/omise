@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linktai.dao.JourneyMapper">
+  <resultMap id="BaseResultMap" type="com.linktai.pojo.Journey">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+  </resultMap>
+  <insert id="insert" parameterType="com.linktai.pojo.Journey">
+    insert into journey (id, name, content
+      )
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}
+      )
+  </insert>
+  <select id="selectJourneyByName" parameterType="java.lang.String" resultType="com.linktai.pojo.Journey">
+  	SELECT id,name,content FROM journey WHERE name=#{_parameter};
+  </select>
+  
+  <update id="updateJourney" parameterType="com.linktai.pojo.Journey">
+  	UPDATE journey SET content=#{content} WHERE name=#{name};
+  </update>
+</mapper>
